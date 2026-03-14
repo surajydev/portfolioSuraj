@@ -100,7 +100,7 @@ export default function SkillsSection() {
   }, []);
 
   return (
-    <section id="skills" className="relative py-24 overflow-hidden">
+    <section id="skills" className="relative py-24 overflow-hidden section-highlight">
       <CosmicBackground variant="cluster" />
 
       <div className="relative z-10 max-w-4xl mx-auto px-6">
@@ -111,7 +111,7 @@ export default function SkillsSection() {
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
         >
-          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00ff9d] text-glow-green uppercase inline-block">
+          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00ff9d] text-glow-green uppercase inline-block hover-glow cursor-default">
             Skills
           </h2>
           <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00ff9d] to-transparent" />
@@ -138,7 +138,7 @@ export default function SkillsSection() {
             <SkillCard title="Tools & Platforms" icon={Database} color="#0066ff">
               <div className="flex flex-wrap gap-2">
                 {toolSkills.map((s) => (
-                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#0066ff]/30 text-[#0066ff] bg-[#0066ff]/5">
+                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#0066ff]/30 text-[#0066ff] bg-[#0066ff]/5 hover:bg-[#0066ff]/15 hover:border-[#0066ff]/50 hover:scale-105 transition-all duration-300 cursor-default">
                     {s}
                   </span>
                 ))}
@@ -150,7 +150,7 @@ export default function SkillsSection() {
             <SkillCard title="Design" icon={Palette} color="#00b4d8">
               <div className="flex flex-wrap gap-2">
                 {designSkills.map((s) => (
-                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#00b4d8]/30 text-[#00b4d8] bg-[#00b4d8]/5">
+                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#00b4d8]/30 text-[#00b4d8] bg-[#00b4d8]/5 hover:bg-[#00b4d8]/15 hover:border-[#00b4d8]/50 hover:scale-105 transition-all duration-300 cursor-default">
                     {s}
                   </span>
                 ))}

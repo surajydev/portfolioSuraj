@@ -105,7 +105,7 @@ export default function ProjectsSection() {
   }, []);
 
   return (
-    <section id="projects" className="relative py-24 overflow-hidden">
+    <section id="projects" className="relative py-24 overflow-hidden section-highlight">
       <CosmicBackground variant="constellation" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
@@ -116,7 +116,7 @@ export default function ProjectsSection() {
           viewport={{ once: true, amount: 0.3 }}
           variants={fadeUp}
         >
-          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#0066ff] text-glow-blue uppercase">
+          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#0066ff] text-glow-blue uppercase hover-glow cursor-default">
             Projects
           </h2>
           <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#0066ff] to-transparent" />
@@ -239,7 +239,7 @@ export default function ProjectsSection() {
 
                 <div className="flex flex-wrap gap-1.5 mb-4">
                   {proj.tech.map((t) => (
-                    <span key={t} className="font-exo text-[10px] px-2 py-0.5 rounded border border-[#94a3b8]/20 text-[#94a3b8] bg-[#0f172a]/50">
+                    <span key={t} className="font-exo text-[10px] px-2 py-0.5 rounded border border-[#94a3b8]/20 text-[#94a3b8] bg-[#0f172a]/50 hover:border-[#00d4ff]/40 hover:text-[#00d4ff] hover:bg-[#00d4ff]/5 transition-all duration-300 cursor-default">
                       {t}
                     </span>
                   ))}
