@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { Code2, Layers, Database, Palette } from 'lucide-react';
-import { StaggerChild } from '../SectionPanel';
+import CosmicBackground from '../CosmicBackground';
 
 interface SkillBar {
   name: string;
@@ -63,11 +64,8 @@ function SkillCard({
   return (
     <div
       className="glass rounded-xl p-6 relative overflow-hidden"
-      style={{
-        borderColor: `${color}20`,
-      }}
+      style={{ borderColor: `${color}20` }}
     >
-      {/* Rotating border glow effect */}
       <div
         className="absolute inset-0 rounded-xl pointer-events-none"
         style={{
@@ -88,6 +86,11 @@ function SkillCard({
   );
 }
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+};
+
 export default function SkillsSection() {
   const [animate, setAnimate] = useState(false);
 
@@ -97,55 +100,65 @@ export default function SkillsSection() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-16">
-      <StaggerChild className="mb-12 text-center">
-        <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00d4ff] text-glow-cyan uppercase inline-block">
-          Skills
-        </h2>
-        <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent" />
-      </StaggerChild>
+    <section id="skills" className="relative py-24 overflow-hidden">
+      <CosmicBackground variant="cluster" />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
-        <StaggerChild>
-          <SkillCard title="Languages" icon={Code2} color="#00d4ff">
-            {languagesSkills.map((s) => (
-              <SkillBarRow key={s.name} skill={s} color="#00d4ff" animate={animate} />
-            ))}
-          </SkillCard>
-        </StaggerChild>
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <motion.div
+          className="mb-12 text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+        >
+          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00ff9d] text-glow-green uppercase inline-block">
+            Skills
+          </h2>
+          <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00ff9d] to-transparent" />
+        </motion.div>
 
-        <StaggerChild>
-          <SkillCard title="Frameworks" icon={Layers} color="#00ff9d">
-            {frameworkSkills.map((s) => (
-              <SkillBarRow key={s.name} skill={s} color="#00ff9d" animate={animate} />
-            ))}
-          </SkillCard>
-        </StaggerChild>
-
-        <StaggerChild>
-          <SkillCard title="Tools & Platforms" icon={Database} color="#0066ff">
-            <div className="flex flex-wrap gap-2">
-              {toolSkills.map((s) => (
-                <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#0066ff]/30 text-[#0066ff] bg-[#0066ff]/5">
-                  {s}
-                </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp}>
+            <SkillCard title="Languages" icon={Code2} color="#00d4ff">
+              {languagesSkills.map((s) => (
+                <SkillBarRow key={s.name} skill={s} color="#00d4ff" animate={animate} />
               ))}
-            </div>
-          </SkillCard>
-        </StaggerChild>
+            </SkillCard>
+          </motion.div>
 
-        <StaggerChild>
-          <SkillCard title="Design" icon={Palette} color="#00b4d8">
-            <div className="flex flex-wrap gap-2">
-              {designSkills.map((s) => (
-                <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#00b4d8]/30 text-[#00b4d8] bg-[#00b4d8]/5">
-                  {s}
-                </span>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp}>
+            <SkillCard title="Frameworks" icon={Layers} color="#00ff9d">
+              {frameworkSkills.map((s) => (
+                <SkillBarRow key={s.name} skill={s} color="#00ff9d" animate={animate} />
               ))}
-            </div>
-          </SkillCard>
-        </StaggerChild>
+            </SkillCard>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp}>
+            <SkillCard title="Tools & Platforms" icon={Database} color="#0066ff">
+              <div className="flex flex-wrap gap-2">
+                {toolSkills.map((s) => (
+                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#0066ff]/30 text-[#0066ff] bg-[#0066ff]/5">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </SkillCard>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, amount: 0.2 }} variants={fadeUp}>
+            <SkillCard title="Design" icon={Palette} color="#00b4d8">
+              <div className="flex flex-wrap gap-2">
+                {designSkills.map((s) => (
+                  <span key={s} className="font-exo text-xs px-3 py-1.5 rounded-lg border border-[#00b4d8]/30 text-[#00b4d8] bg-[#00b4d8]/5">
+                    {s}
+                  </span>
+                ))}
+              </div>
+            </SkillCard>
+          </motion.div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

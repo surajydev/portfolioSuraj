@@ -1,8 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { Award } from 'lucide-react';
-import { StaggerChild } from '../SectionPanel';
 import { useRef } from 'react';
+import CosmicBackground from '../CosmicBackground';
 
 const certificates = [
   {
@@ -48,7 +49,6 @@ function CertificateCard({ cert }: { cert: typeof certificates[0] }) {
       style={{ borderColor: `${cert.color}25` }}
       onMouseEnter={handleMouseEnter}
     >
-      {/* Shimmer overlay */}
       <div
         className="shimmer absolute inset-0 pointer-events-none"
         style={{
@@ -80,25 +80,47 @@ function CertificateCard({ cert }: { cert: typeof certificates[0] }) {
   );
 }
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+};
+
 export default function CertificatesSection() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-16 max-w-4xl mx-auto">
-      <StaggerChild className="mb-12 text-center">
-        <div className="flex items-center justify-center gap-3">
-          <Award size={28} className="text-[#00b4d8]" />
-          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00b4d8] text-glow-teal uppercase">
-            Certificates & Credentials
-          </h2>
-        </div>
-      </StaggerChild>
+    <section id="certificates" className="relative py-24 overflow-hidden">
+      <CosmicBackground variant="spiral" />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-        {certificates.map((cert) => (
-          <StaggerChild key={cert.title}>
-            <CertificateCard cert={cert} />
-          </StaggerChild>
-        ))}
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
+        <motion.div
+          className="mb-12 text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <Award size={28} className="text-[#00b4d8]" />
+            <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00b4d8] text-glow-teal uppercase">
+              Certificates & Credentials
+            </h2>
+          </div>
+          <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00b4d8] to-transparent" />
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+          {certificates.map((cert) => (
+            <motion.div
+              key={cert.title}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              variants={fadeUp}
+            >
+              <CertificateCard cert={cert} />
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }

@@ -2,7 +2,7 @@
 
 import { MapPin } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { StaggerChild } from '../SectionPanel';
+import CosmicBackground from '../CosmicBackground';
 
 const educationData = [
   {
@@ -44,33 +44,53 @@ const educationData = [
   },
 ];
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' as const } },
+};
+
 export default function EducationSection() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center py-16">
-      <StaggerChild className="mb-12 text-center">
-        <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00b4d8] text-glow-teal uppercase">
-          Education
-        </h2>
-      </StaggerChild>
+    <section id="education" className="relative py-24 overflow-hidden">
+      <CosmicBackground variant="aurora" />
 
-      <div className="relative max-w-[700px] w-full">
-        {/* Timeline line */}
+      <div className="relative z-10 max-w-[700px] mx-auto px-6">
         <motion.div
-          className="absolute left-6 top-0 bottom-0 w-[2px]"
-          style={{ background: 'rgba(0, 212, 255, 0.3)' }}
-          initial={{ scaleY: 0, transformOrigin: 'top' }}
-          animate={{ scaleY: 1 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
-        />
+          className="mb-12 text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+        >
+          <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00b4d8] text-glow-teal uppercase">
+            Education
+          </h2>
+          <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00b4d8] to-transparent" />
+        </motion.div>
 
-        <div className="space-y-12">
-          {educationData.map((edu, idx) => (
-            <StaggerChild key={idx}>
+        <div className="relative">
+          {/* Timeline line */}
+          <motion.div
+            className="absolute left-6 top-0 bottom-0 w-[2px]"
+            style={{ background: 'rgba(0, 212, 255, 0.3)' }}
+            initial={{ scaleY: 0, transformOrigin: 'top' }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.5, ease: 'easeOut' as const }}
+          />
+
+          <div className="space-y-12">
+            {educationData.map((edu, idx) => (
               <motion.div
+                key={idx}
                 className="relative pl-16"
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + idx * 0.2, duration: 0.5, ease: 'easeOut' }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={{
+                  hidden: { opacity: 0, x: 40 },
+                  visible: { opacity: 1, x: 0, transition: { delay: idx * 0.15, duration: 0.5, ease: 'easeOut' as const } },
+                }}
               >
                 {/* Timeline dot */}
                 <div
@@ -132,10 +152,10 @@ export default function EducationSection() {
                   )}
                 </div>
               </motion.div>
-            </StaggerChild>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
