@@ -1,20 +1,64 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Github, Linkedin, Mail, ChevronDown } from 'lucide-react';
+import UfoAnimation from '@/components/UfoAnimation';
 
 export default function HeroSection() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Force play on mount (Windows browsers sometimes block autoplay)
+    const tryPlay = () => {
+      video.play().catch(() => {
+        // If autoplay is blocked, try again on user interaction
+        const resumePlay = () => {
+          video.play();
+          document.removeEventListener('click', resumePlay);
+          document.removeEventListener('scroll', resumePlay);
+        };
+        document.addEventListener('click', resumePlay, { once: true });
+        document.addEventListener('scroll', resumePlay, { once: true });
+      });
+    };
+
+    // Ensure loop works as a fallback
+    const handleEnded = () => {
+      video.currentTime = 0;
+      video.play();
+    };
+
+    video.addEventListener('ended', handleEnded);
+
+    // Wait for loadeddata before playing
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+    }
+
+    return () => {
+      video.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
   return (
     <section id="home" className="relative min-h-screen flex flex-col items-center justify-center text-center w-full overflow-hidden">
       {/* Background Video */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0 }}
+        style={{ zIndex: 0, transform: 'translateZ(0)' }}
       >
         <source src="/hero-bg.mp4" type="video/mp4" />
       </video>
@@ -24,6 +68,9 @@ export default function HeroSection() {
 
       {/* Bottom gradient fade into next section */}
       <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-[#020817] to-transparent" style={{ zIndex: 1 }} />
+
+      {/* UFO Inspector Animation */}
+      <UfoAnimation />
 
       {/* Main Content Container */}
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center justify-center px-6">
@@ -101,8 +148,9 @@ export default function HeroSection() {
             Contact Me
           </a>
           <a
-            href="#"
-            className="font-orbitron text-xs uppercase tracking-wider px-6 py-3 rounded-lg border border-[#94a3b8]/30 text-[#94a3b8] hover:border-[#94a3b8]/60 hover:scale-[1.04] transition-all duration-300"
+            href="/cv"
+            className="font-orbitron text-xs uppercase tracking-wider px-6 py-3 rounded-lg bg-[#00b4d8]/10 border border-[#00b4d8]/40 text-[#00b4d8] hover:bg-[#00b4d8]/20 hover:border-[#00b4d8]/80 hover:scale-[1.04] hover:shadow-[0_0_25px_rgba(0,180,216,0.3)] transition-all duration-300"
+            style={{ boxShadow: '0 0 20px rgba(0, 180, 216, 0.15)' }}
           >
             Download CV
           </a>

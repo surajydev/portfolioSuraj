@@ -4,7 +4,6 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 
 export default function CursorStars() {
   const lastSpawn = useRef(0);
-  const glowRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -59,19 +58,7 @@ export default function CursorStars() {
   useEffect(() => {
     if (!mounted) return;
 
-    const cursor = glowRef.current;
-    
     const handleMouseMove = (e: MouseEvent) => {
-      if (cursor) {
-        cursor.animate(
-          {
-            left: `${e.clientX}px`,
-            top: `${e.clientY}px`,
-          },
-          { duration: 800, fill: "forwards", easing: "ease" }
-        );
-      }
-
       const now = Date.now();
       if (now - lastSpawn.current < 25) return; // throttle (~40 ticks per sec)
       lastSpawn.current = now;
@@ -88,44 +75,5 @@ export default function CursorStars() {
 
   if (!mounted) return null;
 
-  return (
-    <>
-      <svg className="hidden">
-        <defs>
-          <filter id="liquid-warp">
-            <feTurbulence
-              type="fractalNoise"
-              baseFrequency="0.004 0.004" 
-              numOctaves="2"
-              result="noise"
-            />
-            {/* Smoother, gentler water-current distortion map */}
-            <feDisplacementMap
-              in="SourceGraphic"
-              in2="noise"
-              scale="35" 
-              xChannelSelector="R"
-              yChannelSelector="G"
-            />
-          </filter>
-        </defs>
-      </svg>
-      
-      <div 
-        ref={glowRef} 
-        /* Enlarged area, much smoother fluid distortion */
-        className="pointer-events-none fixed w-[800px] h-[800px] rounded-full -translate-x-1/2 -translate-y-1/2 z-[9000] opacity-0 transition-opacity duration-1000 group-hover:opacity-100 mix-blend-screen"
-        style={{ 
-          left: '-1000px', 
-          top: '-1000px', 
-          backdropFilter: 'url(#liquid-warp)', 
-          WebkitBackdropFilter: 'url(#liquid-warp)',
-          background: 'none',
-          maskImage: 'radial-gradient(circle, black 0%, transparent 60%)',
-          WebkitMaskImage: 'radial-gradient(circle, black 0%, transparent 60%)',
-          opacity: 1 
-        }}
-      />
-    </>
-  );
+  return null;
 }

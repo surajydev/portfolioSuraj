@@ -30,50 +30,50 @@ const VARIANT_CONFIGS: Record<Variant, {
   clusterSpread: number;
 }> = {
   nebula: {
-    starCount: 180,
-    clusters: 3,
+    starCount: 80,
+    clusters: 2,
     colors: [[0, 212, 255], [0, 255, 157], [100, 150, 255]],
     driftSpeed: 0.15,
     clusterSpread: 0.3,
   },
   cluster: {
-    starCount: 220,
-    clusters: 5,
+    starCount: 100,
+    clusters: 3,
     colors: [[0, 212, 255], [0, 180, 216], [255, 255, 255]],
     driftSpeed: 0.1,
     clusterSpread: 0.2,
   },
   constellation: {
-    starCount: 120,
+    starCount: 60,
     clusters: 2,
     colors: [[0, 255, 157], [0, 212, 255], [200, 200, 255]],
     driftSpeed: 0.08,
     clusterSpread: 0.5,
   },
   aurora: {
-    starCount: 160,
-    clusters: 4,
+    starCount: 70,
+    clusters: 2,
     colors: [[0, 255, 157], [0, 180, 216], [100, 255, 200]],
     driftSpeed: 0.2,
     clusterSpread: 0.25,
   },
   'deep-space': {
-    starCount: 250,
-    clusters: 6,
+    starCount: 100,
+    clusters: 3,
     colors: [[0, 102, 255], [0, 212, 255], [180, 180, 255]],
     driftSpeed: 0.05,
     clusterSpread: 0.15,
   },
   binary: {
-    starCount: 140,
+    starCount: 60,
     clusters: 2,
     colors: [[0, 212, 255], [255, 200, 100], [255, 255, 255]],
     driftSpeed: 0.12,
     clusterSpread: 0.35,
   },
   spiral: {
-    starCount: 200,
-    clusters: 4,
+    starCount: 80,
+    clusters: 2,
     colors: [[0, 180, 216], [0, 255, 157], [0, 102, 255]],
     driftSpeed: 0.1,
     clusterSpread: 0.2,
@@ -84,7 +84,8 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<CosmicStar[]>([]);
   const animRef = useRef<number>(0);
-  const visibleRef = useRef(true);
+  const visibleRef = useRef(false);
+  const lastFrameRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -134,9 +135,9 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
       return {
         x,
         y,
-        size: 0.3 + Math.random() * (inCluster ? 2.5 : 1.5),
-        opacity: 0.15 + Math.random() * (inCluster ? 0.7 : 0.4),
-        twinkleSpeed: 0.3 + Math.random() * 2.5,
+        size: 0.3 + Math.random() * (inCluster ? 2.0 : 1.2),
+        opacity: 0.15 + Math.random() * (inCluster ? 0.5 : 0.3),
+        twinkleSpeed: 0.3 + Math.random() * 2.0,
         twinkleOffset: Math.random() * Math.PI * 2,
         color: inCluster ? cluster.color : color,
         drift: {
@@ -146,7 +147,7 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
       };
     });
 
-    // IntersectionObserver for performance
+    // IntersectionObserver — only render when visible
     const io = new IntersectionObserver(
       ([entry]) => { visibleRef.current = entry.isIntersecting; },
       { threshold: 0.05 }
@@ -154,14 +155,18 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
     io.observe(parent);
 
     const animate = (time: number) => {
-      if (!visibleRef.current) {
-        animRef.current = requestAnimationFrame(animate);
-        return;
-      }
+      animRef.current = requestAnimationFrame(animate);
+
+      // Skip if not visible
+      if (!visibleRef.current) return;
+
+      // Throttle to ~24fps
+      if (time - lastFrameRef.current < 42) return;
+      lastFrameRef.current = time;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Subtle nebula glow per cluster
+      // Subtle nebula glow per cluster (only draw once — static feel)
       clusters.forEach((c) => {
         const gx = c.x * canvas.width;
         const gy = c.y * canvas.height;
@@ -183,13 +188,13 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
         const px = star.x * canvas.width;
         const py = star.y * canvas.height;
 
-        // Glow
-        if (curSize > 1.2) {
-          const glow = ctx.createRadialGradient(px, py, 0, px, py, curSize * 3);
-          glow.addColorStop(0, `rgba(${star.color[0]}, ${star.color[1]}, ${star.color[2]}, ${curOpacity * 0.3})`);
+        // Only draw glow for larger stars (reduced threshold)
+        if (curSize > 1.5) {
+          const glow = ctx.createRadialGradient(px, py, 0, px, py, curSize * 2.5);
+          glow.addColorStop(0, `rgba(${star.color[0]}, ${star.color[1]}, ${star.color[2]}, ${curOpacity * 0.25})`);
           glow.addColorStop(1, 'rgba(0,0,0,0)');
           ctx.fillStyle = glow;
-          ctx.fillRect(px - curSize * 3, py - curSize * 3, curSize * 6, curSize * 6);
+          ctx.fillRect(px - curSize * 2.5, py - curSize * 2.5, curSize * 5, curSize * 5);
         }
 
         ctx.beginPath();
@@ -206,8 +211,6 @@ export default function CosmicBackground({ variant = 'nebula' }: { variant?: Var
         if (star.x < -0.05) star.x = 1.05;
         if (star.x > 1.05) star.x = -0.05;
       });
-
-      animRef.current = requestAnimationFrame(animate);
     };
 
     animRef.current = requestAnimationFrame(animate);

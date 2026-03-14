@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, User, Briefcase, Cpu, Mail, Search, Menu, X, Sun } from 'lucide-react';
 
@@ -56,9 +56,11 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
-  
-  const [mouseX, setMouseX] = useState(0);
-  const [mouseY, setMouseY] = useState(0);
+
+  // Use refs for mouse position to avoid re-renders on every mouse move
+  const mouseXRef = useRef(0);
+  const mouseYRef = useRef(0);
+  const brandingRef = useRef<HTMLDivElement>(null);
 
   // Refs for animation loop closure
   const isMobileRef = useRef(false);
@@ -77,14 +79,18 @@ export default function Navbar() {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     const handleMouseMove = (e: MouseEvent) => {
-      setMouseX((e.clientX / window.innerWidth - 0.5) * 20);
-      setMouseY((e.clientY / window.innerHeight - 0.5) * 20);
+      mouseXRef.current = (e.clientX / window.innerWidth - 0.5) * 20;
+      mouseYRef.current = (e.clientY / window.innerHeight - 0.5) * 20;
+      // Update branding transform directly via DOM (no React re-render)
+      if (brandingRef.current) {
+        brandingRef.current.style.transform = `translate(${mouseXRef.current * 0.1}px, ${mouseYRef.current * 0.1}px)`;
+      }
     };
 
     handleResize();
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -176,12 +182,13 @@ export default function Navbar() {
             ? 'py-3 bg-[#020817]/80 backdrop-blur-xl border-b border-white/5 shadow-[0_4px_30px_rgba(0,0,0,0.5)]' 
             : 'py-6 bg-transparent'
         }`}
+        style={{ willChange: 'transform', transform: 'translateZ(0)' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-row justify-between items-center relative h-16 sm:h-20">
           
           {/* Left: Branding (Sun + Name + Orbiting Planets) */}
           <div className="flex-1 flex items-center relative z-40">
-            <div className="flex items-center gap-4 cursor-pointer" onClick={() => { if (isMobile) setIsMobileExpanded(!isMobileExpanded); }} style={{ transform: `translate(${mouseX * 0.1}px, ${mouseY * 0.1}px)` }}>
+            <div ref={brandingRef} className="flex items-center gap-4 cursor-pointer" onClick={() => { if (isMobile) setIsMobileExpanded(!isMobileExpanded); }}>
               
               {/* Solar System (Sun + Planets) */}
               <div className="relative flex items-center justify-center min-w-[140px] sm:min-w-[180px]" style={{ marginLeft: '-20px' }}>

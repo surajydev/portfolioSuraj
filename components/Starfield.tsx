@@ -17,6 +17,8 @@ export default function Starfield() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const animRef = useRef<number>(0);
+  const visibleRef = useRef(true);
+  const lastFrameRef = useRef(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,6 +26,7 @@ export default function Starfield() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Use devicePixelRatio of 1 to avoid rendering at 2x on high-DPI screens
     const resize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
@@ -31,33 +34,40 @@ export default function Starfield() {
     resize();
     window.addEventListener('resize', resize);
 
-    // Initialize 220 stars
-    starsRef.current = Array.from({ length: 220 }, () => ({
+    // Reduced from 220 to 120 stars
+    starsRef.current = Array.from({ length: 120 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: 0.3 + Math.random() * 2.0,
-      opacity: 0.1 + Math.random() * 0.6,
-      speed: 0.1 + Math.random() * 0.3,
-      twinkleSpeed: 0.5 + Math.random() * 2.0,
+      size: 0.3 + Math.random() * 1.5,
+      opacity: 0.1 + Math.random() * 0.5,
+      speed: 0.1 + Math.random() * 0.25,
+      twinkleSpeed: 0.5 + Math.random() * 1.5,
       twinkleOffset: Math.random() * Math.PI * 2,
-      drift: (Math.random() - 0.5) * 0.1,
+      drift: (Math.random() - 0.5) * 0.08,
     }));
 
+    // Visibility observer — skip rendering when off-screen
+    const io = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting; },
+      { threshold: 0.01 }
+    );
+    io.observe(canvas);
+
     const animate = (time: number) => {
+      animRef.current = requestAnimationFrame(animate);
+
+      // Skip if not visible
+      if (!visibleRef.current) return;
+
+      // Throttle to ~30fps instead of 60fps
+      if (time - lastFrameRef.current < 33) return;
+      lastFrameRef.current = time;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Radial gradient overlay for depth
-      const gradient = ctx.createRadialGradient(
-        canvas.width / 2, canvas.height / 2, 0,
-        canvas.width / 2, canvas.height / 2, Math.max(canvas.width, canvas.height) * 0.7
-      );
-      gradient.addColorStop(0, 'rgba(5, 15, 40, 0.15)');
-      gradient.addColorStop(1, 'rgba(2, 8, 23, 0)');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      const t = time * 0.001;
 
       starsRef.current.forEach((star) => {
-        const t = time * 0.001;
         const twinkle = Math.sin(t * star.twinkleSpeed + star.twinkleOffset);
         const currentOpacity = star.opacity * (0.5 + 0.5 * twinkle);
         const currentSize = star.size * (0.8 + 0.2 * twinkle);
@@ -78,14 +88,13 @@ export default function Starfield() {
         if (star.x < -5) star.x = canvas.width + 5;
         if (star.x > canvas.width + 5) star.x = -5;
       });
-
-      animRef.current = requestAnimationFrame(animate);
     };
 
     animRef.current = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener('resize', resize);
+      io.disconnect();
       cancelAnimationFrame(animRef.current);
     };
   }, []);
@@ -94,7 +103,7 @@ export default function Starfield() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
+      style={{ zIndex: 0, transform: 'translateZ(0)' }}
     />
   );
 }

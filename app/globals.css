@@ -26,6 +26,8 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
@@ -33,6 +35,15 @@ body {
   color: var(--text-primary);
   font-family: "Exo 2", sans-serif;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+}
+
+/* GPU-composited sections to reduce scroll-time repaints */
+section {
+  contain: layout style paint;
+  content-visibility: auto;
+  contain-intrinsic-size: auto 100vh;
 }
 
 .font-orbitron {
@@ -48,6 +59,8 @@ body {
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  will-change: border-color, box-shadow;
+  transform: translateZ(0);
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
