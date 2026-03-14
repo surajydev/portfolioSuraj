@@ -7,58 +7,122 @@ import { Github, Linkedin, Mail, ChevronDown } from 'lucide-react';
 import UfoAnimation from '@/components/UfoAnimation';
 
 export default function HeroSection() {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoARef = useRef<HTMLVideoElement>(null);
+  const videoBRef = useRef<HTMLVideoElement>(null);
+  const activeRef = useRef<'A' | 'B'>('A');
+  const swappingRef = useRef(false);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+    const videoA = videoARef.current;
+    const videoB = videoBRef.current;
+    if (!videoA || !videoB) return;
 
-    // Force play on mount (Windows browsers sometimes block autoplay)
-    const tryPlay = () => {
-      video.play().catch(() => {
-        // If autoplay is blocked, try again on user interaction
-        const resumePlay = () => {
-          video.play();
-          document.removeEventListener('click', resumePlay);
-          document.removeEventListener('scroll', resumePlay);
+    // Long, gradual crossfade so the loop point is invisible
+    const FADE_DURATION = 4;
+
+    const tryPlay = (v: HTMLVideoElement) => {
+      v.play().catch(() => {
+        const resume = () => {
+          v.play();
+          document.removeEventListener('click', resume);
+          document.removeEventListener('scroll', resume);
         };
-        document.addEventListener('click', resumePlay, { once: true });
-        document.addEventListener('scroll', resumePlay, { once: true });
+        document.addEventListener('click', resume, { once: true });
+        document.addEventListener('scroll', resume, { once: true });
       });
     };
 
-    // Ensure loop works as a fallback
-    const handleEnded = () => {
-      video.currentTime = 0;
-      video.play();
-    };
+    // Start: A is visible and plays, B is hidden at time 0
+    videoA.style.opacity = '1';
+    videoB.style.opacity = '0';
+    videoB.currentTime = 0;
 
-    video.addEventListener('ended', handleEnded);
-
-    // Wait for loadeddata before playing
-    if (video.readyState >= 2) {
-      tryPlay();
+    if (videoA.readyState >= 2) {
+      tryPlay(videoA);
     } else {
-      video.addEventListener('loadeddata', tryPlay, { once: true });
+      videoA.addEventListener('loadeddata', () => tryPlay(videoA), { once: true });
     }
 
+    const handleTimeUpdate = () => {
+      const active = activeRef.current === 'A' ? videoA : videoB;
+      const standby = activeRef.current === 'A' ? videoB : videoA;
+
+      if (swappingRef.current) return;
+      if (!active.duration || active.duration === Infinity) return;
+
+      const remaining = active.duration - active.currentTime;
+
+      if (remaining <= FADE_DURATION && remaining > 0.1) {
+        swappingRef.current = true;
+
+        // Prepare standby: start from beginning
+        standby.currentTime = 0;
+        standby.style.transition = 'none';
+        standby.style.opacity = '0';
+        tryPlay(standby);
+
+        // Give a frame for the standby to start rendering, then blend
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // Fade standby in very gradually while active fades out
+            standby.style.transition = `opacity ${FADE_DURATION}s linear`;
+            active.style.transition = `opacity ${FADE_DURATION}s linear`;
+            standby.style.opacity = '1';
+            active.style.opacity = '0';
+
+            // After crossfade, clean up and swap roles
+            setTimeout(() => {
+              active.pause();
+              active.currentTime = 0;
+              // Reset transitions immediately so next swap is clean
+              active.style.transition = 'none';
+              standby.style.transition = 'none';
+              activeRef.current = activeRef.current === 'A' ? 'B' : 'A';
+              swappingRef.current = false;
+            }, FADE_DURATION * 1000 + 200);
+          });
+        });
+      }
+    };
+
+    videoA.addEventListener('timeupdate', handleTimeUpdate);
+    videoB.addEventListener('timeupdate', handleTimeUpdate);
+
     return () => {
-      video.removeEventListener('ended', handleEnded);
+      videoA.removeEventListener('timeupdate', handleTimeUpdate);
+      videoB.removeEventListener('timeupdate', handleTimeUpdate);
     };
   }, []);
 
+  const videoStyle: React.CSSProperties = {
+    position: 'absolute',
+    inset: 0,
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover' as const,
+    zIndex: 0,
+    transform: 'translateZ(0)',
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex flex-col items-center justify-center text-center w-full overflow-hidden">
-      {/* Background Video */}
+      {/* Background Video A */}
       <video
-        ref={videoRef}
-        autoPlay
-        loop
+        ref={videoARef}
         muted
         playsInline
         preload="auto"
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0, transform: 'translateZ(0)' }}
+        style={{ ...videoStyle, zIndex: 0 }}
+      >
+        <source src="/hero-bg.mp4" type="video/mp4" />
+      </video>
+      {/* Background Video B (crossfade partner) */}
+      <video
+        ref={videoBRef}
+        muted
+        playsInline
+        preload="auto"
+        style={{ ...videoStyle, zIndex: 0, opacity: 0 }}
       >
         <source src="/hero-bg.mp4" type="video/mp4" />
       </video>
