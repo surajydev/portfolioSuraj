@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Home, User, Briefcase, Cpu, Mail, Search, Menu, X, Sun } from 'lucide-react';
+import { Home, User, Briefcase, Cpu, Mail, Search, Menu, X, Sun, GraduationCap, Dumbbell, Award, FileText } from 'lucide-react';
 
 const planets = [
   { name: 'Home', icon: Home, color: '#38bdf8', angleOffset: 0 },
@@ -10,6 +11,18 @@ const planets = [
   { name: 'Projects', icon: Briefcase, color: '#a78bfa', angleOffset: (Math.PI * 2) * 0.4 },
   { name: 'Skills', icon: Cpu, color: '#fbbf24', angleOffset: (Math.PI * 2) * 0.6 },
   { name: 'Contact', icon: Mail, color: '#f87171', angleOffset: (Math.PI * 2) * 0.8 },
+];
+
+const menuItems = [
+  { name: 'Home', icon: Home, color: '#38bdf8', subtitle: 'Launch Pad', href: '#home' },
+  { name: 'About', icon: User, color: '#34d399', subtitle: 'Identity', href: '#about' },
+  { name: 'Skills', icon: Cpu, color: '#fbbf24', subtitle: 'Arsenal', href: '#skills' },
+  { name: 'Projects', icon: Briefcase, color: '#a78bfa', subtitle: 'Creations', href: '#projects' },
+  { name: 'Education', icon: GraduationCap, color: '#60a5fa', subtitle: 'Academics', href: '#education' },
+  { name: 'Training', icon: Dumbbell, color: '#f472b6', subtitle: 'Experience', href: '#training' },
+  { name: 'Certificates', icon: Award, color: '#fb923c', subtitle: 'Achievements', href: '#certificates' },
+  { name: 'Contact', icon: Mail, color: '#f87171', subtitle: 'Connect', href: '#contact' },
+  { name: 'Resume', icon: FileText, color: '#2dd4bf', subtitle: 'Download CV', href: '/cv', isPage: true },
 ];
 
 function lerp(start: number, end: number, factor: number) {
@@ -56,6 +69,20 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isMobileExpanded, setIsMobileExpanded] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => { setMounted(true); }, []);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
+
 
   // Use refs for mouse position to avoid re-renders on every mouse move
   const mouseXRef = useRef(0);
@@ -295,52 +322,155 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Fullscreen Fluid Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div 
-            initial={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
-            animate={{ opacity: 1, clipPath: 'circle(150% at top right)' }}
-            exit={{ opacity: 0, clipPath: 'circle(0% at top right)' }}
-            transition={{ duration: 0.7, ease: [0.32, 1, 0.23, 1] }}
-            className="fixed inset-0 z-40 bg-[#020817]/95 backdrop-blur-2xl flex flex-col items-center justify-center p-6"
-          >
-            {/* Background decorative elements */}
-            <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cyan-500/10 rounded-full blur-[100px] pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+      {/* Right-Side Slide-In Menu Panel — rendered via portal */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {menuOpen && (
+            <>
+              {/* Backdrop overlay */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 z-[44] bg-black/60 backdrop-blur-sm"
+                onClick={() => setMenuOpen(false)}
+              />
 
-            <div className="flex flex-col items-center gap-10 mt-10">
-              {planets.map((p, i) => (
-                <motion.div
-                  key={p.name}
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -30, opacity: 0 }}
-                  transition={{ delay: i * 0.1 + 0.2, duration: 0.5, ease: "easeOut" }}
-                  className="group relative cursor-pointer"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  <div className="flex items-center gap-6">
-                    <p.icon className="w-8 h-8 opacity-50 group-hover:opacity-100 transition-all duration-300 group-hover:scale-110" style={{ color: p.color }} />
-                    <span className="text-4xl sm:text-5xl font-light tracking-widest text-white/50 group-hover:text-white transition-colors duration-300">
-                      {p.name}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.8 }}
-              className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/30 tracking-widest text-xs"
-            >
-              EXPLORE THE UNIVERSE
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {/* Slide-in panel */}
+              <motion.div
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+                className="fixed top-0 right-0 bottom-0 z-[46] w-[85vw] max-w-[420px] flex flex-col"
+                style={{
+                  backgroundImage: 'url(/menu-bg.jpg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat',
+                  borderLeft: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
+                {/* Gradient glow on left edge */}
+                <div className="absolute top-0 left-0 w-[2px] h-full bg-gradient-to-b from-cyan-400/60 via-purple-500/40 to-pink-500/30 pointer-events-none" />
+                <div className="absolute top-0 left-0 w-8 h-full bg-gradient-to-r from-cyan-400/5 to-transparent pointer-events-none" />
+
+                {/* Decorative gradient orbs */}
+                <div className="absolute top-[15%] right-[10%] w-48 h-48 bg-cyan-500/8 rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute bottom-[20%] left-[5%] w-56 h-56 bg-purple-500/8 rounded-full blur-[90px] pointer-events-none" />
+                <div className="absolute top-[60%] right-[30%] w-32 h-32 bg-pink-500/5 rounded-full blur-[60px] pointer-events-none" />
+
+                {/* Header: close button */}
+                <div className="flex justify-end items-center px-6 pt-6 pb-2">
+                  <motion.button
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0, opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    transition={{ delay: 0.2, duration: 0.4 }}
+                    onClick={() => setMenuOpen(false)}
+                    className="relative p-3 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 group"
+                  >
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <X className="relative w-5 h-5 text-white/70 group-hover:text-white transition-colors z-10" />
+                  </motion.button>
+                </div>
+
+                {/* Navigation Links */}
+                <nav className="flex-1 flex flex-col justify-center px-8 sm:px-10 gap-1 overflow-y-auto scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}>
+                  {menuItems.map((item, i) => (
+                    <motion.a
+                      key={item.name}
+                      href={item.href}
+                      initial={{ x: 80, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: 40, opacity: 0 }}
+                      transition={{ delay: i * 0.06 + 0.12, duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
+                      className="group relative flex items-center gap-4 py-3 px-4 rounded-2xl cursor-pointer transition-all duration-300 hover:bg-white/[0.04]"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setMenuOpen(false);
+                        if ((item as any).isPage) {
+                          setTimeout(() => { window.location.href = item.href; }, 350);
+                        } else {
+                          const sectionId = item.href.replace('#', '');
+                          const el = document.getElementById(sectionId);
+                          if (el) {
+                            setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+                          }
+                        }
+                      }}
+                    >
+                      {/* Left accent bar (visible on hover) */}
+                      <div
+                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-0 group-hover:h-8 rounded-full transition-all duration-300"
+                        style={{ backgroundColor: item.color }}
+                      />
+
+                      {/* Icon container */}
+                      <div
+                        className="relative flex items-center justify-center w-10 h-10 rounded-xl border transition-all duration-300"
+                        style={{
+                          borderColor: `${item.color}20`,
+                          backgroundColor: `${item.color}08`,
+                        }}
+                      >
+                        <div
+                          className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                          style={{
+                            boxShadow: `inset 0 0 20px ${item.color}15, 0 0 20px ${item.color}10`,
+                          }}
+                        />
+                        <item.icon
+                          className="relative w-4.5 h-4.5 transition-all duration-300 group-hover:scale-110"
+                          style={{
+                            color: item.color,
+                            filter: `drop-shadow(0 0 0px transparent)`,
+                          }}
+                        />
+                      </div>
+
+                      {/* Label */}
+                      <div className="flex flex-col">
+                        <span className="text-lg sm:text-xl font-light tracking-[0.12em] text-white/60 group-hover:text-white transition-colors duration-300 font-exo">
+                          {item.name}
+                        </span>
+                        <span className="text-[9px] tracking-[0.3em] uppercase text-white/20 group-hover:text-white/40 transition-colors duration-300 mt-0.5">
+                          {item.subtitle}
+                        </span>
+                      </div>
+
+                      {/* Arrow indicator */}
+                      <div className="ml-auto opacity-0 group-hover:opacity-60 -translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                          <path d="M6 4L10 8L6 12" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
+                    </motion.a>
+                  ))}
+                </nav>
+
+                {/* Footer */}
+                <div className="px-8 sm:px-10 pb-8 pt-4">
+                  {/* Gradient separator */}
+                  <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-6" />
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                    className="text-center text-[10px] tracking-[0.4em] uppercase text-white/20"
+                    style={{ textShadow: '0 0 20px rgba(0,212,255,0.15)' }}
+                  >
+                    Explore the Universe
+                  </motion.p>
+                </div>
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.documentElement
+      )}
     </>
   );
 }
