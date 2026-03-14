@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import CosmicBackground from '../CosmicBackground';
 
 /* ─── Animated counter ─── */
 function AnimatedNumber({ target, duration = 1000 }: { target: number; duration?: number }) {
@@ -62,9 +61,84 @@ const fadeIn = {
 
 /* ─── Component ─── */
 export default function AboutSection() {
+  const videoARef = useRef<HTMLVideoElement>(null);
+  const videoBRef = useRef<HTMLVideoElement>(null);
+  const [activeVideo, setActiveVideo] = useState<'A' | 'B'>('A');
+  const switchingRef = useRef(false);
+
+  // Dual-video crossfade for ultra-smooth seamless loop
+  useEffect(() => {
+    const videoA = videoARef.current;
+    const videoB = videoBRef.current;
+    if (!videoA || !videoB) return;
+
+    const CROSSFADE_LEAD = 2.5; // start crossfade this many seconds before end
+
+    const crossfade = (current: HTMLVideoElement, next: HTMLVideoElement, nextLabel: 'A' | 'B') => {
+      if (switchingRef.current) return;
+      if (!current.duration || current.currentTime < current.duration - CROSSFADE_LEAD) return;
+
+      switchingRef.current = true;
+      next.currentTime = 0;
+      next.play().catch(() => {});
+      setActiveVideo(nextLabel);
+
+      // Reset guard after crossfade completes
+      setTimeout(() => {
+        switchingRef.current = false;
+      }, 3000);
+    };
+
+    const onUpdateA = () => crossfade(videoA, videoB, 'B');
+    const onUpdateB = () => crossfade(videoB, videoA, 'A');
+
+    videoA.addEventListener('timeupdate', onUpdateA);
+    videoB.addEventListener('timeupdate', onUpdateB);
+
+    videoA.play().catch(() => {});
+
+    return () => {
+      videoA.removeEventListener('timeupdate', onUpdateA);
+      videoB.removeEventListener('timeupdate', onUpdateB);
+    };
+  }, []);
+
   return (
-    <section id="about" className="relative py-24 overflow-hidden section-highlight">
-      <CosmicBackground variant="nebula" />
+    <section id="about" className="relative py-24 overflow-hidden">
+      {/* Dual Video Background */}
+      <div className="absolute inset-0 z-0">
+        <video
+          ref={videoARef}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            filter: 'brightness(0.45) saturate(1.3)',
+            opacity: activeVideo === 'A' ? 1 : 0,
+            transition: 'opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          <source src="/video_20260314_234840.mp4" type="video/mp4" />
+        </video>
+        <video
+          ref={videoBRef}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            filter: 'brightness(0.45) saturate(1.3)',
+            opacity: activeVideo === 'B' ? 1 : 0,
+            transition: 'opacity 2.5s cubic-bezier(0.4, 0, 0.2, 1)',
+          }}
+        >
+          <source src="/video_20260314_234840.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020817]/50 via-[#020817]/25 to-[#020817]/50" />
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#020817] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#020817] to-transparent" />
+      </div>
 
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Section Title */}
