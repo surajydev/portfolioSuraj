@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 
 /* ─── Planet-Skill Mapping (ordered by priority, inner → outer orbit) ─── */
@@ -226,9 +226,198 @@ function OrbitingPlanet({ planet }: { planet: PlanetSkill }) {
   );
 }
 
+/* ─── Moon orbiting Earth (sub-orbit) ─── */
+const MOON_SIZE = 11; // ~0.27 × Earth (40px)
+const MOON_ORBIT_RADIUS = 32; // circular sub-orbit radius around Earth
+const MOON_DURATION = 5; // orbit period in seconds
+
+function OrbitingMoon() {
+  const earthData = planets.find((p) => p.planet === 'Earth')!;
+  const { orbitA, orbitB, duration, startAngle, size: earthSize } = earthData;
+  const earthHalf = earthSize / 2;
+  const moonHalf = MOON_SIZE / 2;
+
+  // We need to compute Earth's position at each frame
+  // then offset the moon's circular orbit around it
+  const steps = 360;
+  const xKeyframes: number[] = [];
+  const yKeyframes: number[] = [];
+
+  for (let i = 0; i <= steps; i++) {
+    // Earth's position on its solar orbit
+    const earthAngle = ((startAngle + (i / steps) * 360) * Math.PI) / 180;
+    const earthX = Math.cos(earthAngle) * orbitA;
+    const earthY = Math.sin(earthAngle) * orbitB;
+
+    // Moon's position on its sub-orbit around Earth
+    // Moon completes multiple orbits per one Earth orbit
+    const moonOrbitsPerEarthOrbit = duration / MOON_DURATION;
+    const moonAngle = ((i / steps) * 360 * moonOrbitsPerEarthOrbit * Math.PI) / 180;
+    const moonX = earthX + Math.cos(moonAngle) * MOON_ORBIT_RADIUS;
+    const moonY = earthY + Math.sin(moonAngle) * MOON_ORBIT_RADIUS;
+
+    xKeyframes.push(moonX - moonHalf);
+    yKeyframes.push(moonY - moonHalf);
+  }
+
+  return (
+    <motion.div
+      className="absolute pointer-events-none"
+      style={{ left: 0, top: 0 }}
+      animate={{ x: xKeyframes, y: yKeyframes }}
+      transition={{
+        duration,
+        ease: 'linear',
+        repeat: Infinity,
+        repeatType: 'loop',
+      }}
+    >
+      <div
+        className="rounded-full overflow-hidden"
+        style={{
+          width: MOON_SIZE,
+          height: MOON_SIZE,
+          boxShadow: '0 0 6px rgba(200,200,220,0.4), 0 0 2px rgba(200,200,220,0.6)',
+        }}
+      >
+        <img
+          src="/moon.png"
+          alt="Moon"
+          className="w-full h-full object-cover rounded-full"
+          draggable={false}
+        />
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─── Pole Star (Polaris) ─── */
+function PoleStar() {
+  return (
+    <div
+      className="absolute z-10"
+      style={{ top: 45, right: 60 }}
+    >
+      {/* Outer glow — slow pulse */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: 28,
+          height: 28,
+          top: -10,
+          left: -10,
+          background: 'radial-gradient(circle, rgba(220,240,255,0.25) 0%, transparent 70%)',
+        }}
+        animate={{ scale: [1, 1.6, 1, 1.3, 1], opacity: [0.4, 1, 0.3, 0.8, 0.4] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      {/* Star cross rays — twinkle */}
+      <motion.div
+        className="absolute"
+        style={{
+          width: 1,
+          height: 18,
+          top: -5,
+          left: 3.5,
+          background: 'linear-gradient(to bottom, transparent, rgba(220,240,255,0.8), transparent)',
+        }}
+        animate={{ scaleY: [1, 1.5, 0.6, 1.3, 1], opacity: [0.6, 1, 0.3, 0.9, 0.6] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute"
+        style={{
+          width: 18,
+          height: 1,
+          top: 3.5,
+          left: -5,
+          background: 'linear-gradient(to right, transparent, rgba(220,240,255,0.8), transparent)',
+        }}
+        animate={{ scaleX: [1, 1.5, 0.6, 1.3, 1], opacity: [0.6, 1, 0.3, 0.9, 0.6] }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+      />
+      {/* Core — twinkle brightness */}
+      <motion.div
+        className="rounded-full"
+        style={{
+          width: 8,
+          height: 8,
+          background: 'radial-gradient(circle, #f0f4ff 0%, #a8c8ff 60%, transparent 100%)',
+          boxShadow: '0 0 4px #ddeaff, 0 0 10px rgba(180,210,255,0.5)',
+        }}
+        animate={{
+          scale: [1, 1.2, 0.9, 1.15, 1],
+          opacity: [0.8, 1, 0.5, 1, 0.8],
+          boxShadow: [
+            '0 0 4px #ddeaff, 0 0 10px rgba(180,210,255,0.5)',
+            '0 0 8px #ddeaff, 0 0 20px rgba(180,210,255,0.8)',
+            '0 0 3px #ddeaff, 0 0 6px rgba(180,210,255,0.3)',
+            '0 0 7px #ddeaff, 0 0 16px rgba(180,210,255,0.7)',
+            '0 0 4px #ddeaff, 0 0 10px rgba(180,210,255,0.5)',
+          ],
+        }}
+        transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      {/* Label */}
+      <div
+        className="absolute font-orbitron text-[7px] text-[#a8c8ff] tracking-[0.15em] whitespace-nowrap"
+        style={{ top: 14, left: -8, opacity: 0.7 }}
+      >
+        POLARIS
+      </div>
+    </div>
+  );
+}
+
+/* ─── Seamless Video Background Hook ─── */
+const FADE_DURATION = 1.5; // seconds for crossfade
+const VIDEO_SRC = '/323-135992580.mp4';
+
+function useSeamlessVideoLoop() {
+  const videoARef = useRef<HTMLVideoElement>(null);
+  const videoBRef = useRef<HTMLVideoElement>(null);
+  const [activeVideo, setActiveVideo] = useState<'A' | 'B'>('A');
+
+  const handleTimeUpdate = useCallback((source: 'A' | 'B') => {
+    const current = source === 'A' ? videoARef.current : videoBRef.current;
+    const next = source === 'A' ? videoBRef.current : videoARef.current;
+    if (!current || !next) return;
+
+    const timeLeft = current.duration - current.currentTime;
+    if (timeLeft <= FADE_DURATION && activeVideo === source) {
+      // Start the next video and crossfade
+      next.currentTime = 0;
+      next.play().catch(() => {});
+      setActiveVideo(source === 'A' ? 'B' : 'A');
+    }
+  }, [activeVideo]);
+
+  useEffect(() => {
+    const vA = videoARef.current;
+    const vB = videoBRef.current;
+    if (!vA || !vB) return;
+
+    const onTimeA = () => handleTimeUpdate('A');
+    const onTimeB = () => handleTimeUpdate('B');
+    vA.addEventListener('timeupdate', onTimeA);
+    vB.addEventListener('timeupdate', onTimeB);
+
+    // Kick off video A
+    vA.play().catch(() => {});
+
+    return () => {
+      vA.removeEventListener('timeupdate', onTimeA);
+      vB.removeEventListener('timeupdate', onTimeB);
+    };
+  }, [handleTimeUpdate]);
+
+  return { videoARef, videoBRef, activeVideo };
+}
+
 /* ─── Main Component ─── */
 export default function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const { videoARef, videoBRef, activeVideo } = useSeamlessVideoLoop();
 
   return (
     <section
@@ -237,13 +426,33 @@ export default function SkillsSection() {
       className="relative py-20 overflow-hidden"
       style={{ minHeight: '800px' }}
     >
-      {/* Starry Night Sky Background */}
+      {/* Seamless Looping Video Background */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="/beautiful-view-stars-night-sky.jpg"
-          alt=""
+        <video
+          ref={videoARef}
+          src={VIDEO_SRC}
+          muted
+          playsInline
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: 'brightness(0.35) saturate(1.2)' }}
+          style={{
+            filter: 'brightness(0.55) saturate(1.2)',
+            opacity: activeVideo === 'A' ? 1 : 0,
+            transition: `opacity ${FADE_DURATION}s ease-in-out`,
+          }}
+        />
+        <video
+          ref={videoBRef}
+          src={VIDEO_SRC}
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            filter: 'brightness(0.55) saturate(1.2)',
+            opacity: activeVideo === 'B' ? 1 : 0,
+            transition: `opacity ${FADE_DURATION}s ease-in-out`,
+          }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-[#020817]/60 via-[#020817]/30 to-[#020817]/60" />
         <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#020817] to-transparent" />
@@ -357,7 +566,12 @@ export default function SkillsSection() {
                   {planets.map((p) => (
                     <OrbitingPlanet key={p.planet} planet={p} />
                   ))}
+                  {/* Moon sub-orbiting Earth */}
+                  <OrbitingMoon />
                 </div>
+
+                {/* Pole Star */}
+                <PoleStar />
               </>
             );
           })()}
