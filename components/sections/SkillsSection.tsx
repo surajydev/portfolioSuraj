@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /* ─── Planet-Skill Mapping (ordered by priority, inner → outer orbit) ─── */
 /* Real solar system diameter ratios (relative to Earth = 1):
@@ -150,7 +150,7 @@ function OrbitPath({ a, b }: { a: number; b: number; color: string }) {
 }
 
 /* ─── Orbiting Planet Component ─── */
-function OrbitingPlanet({ planet }: { planet: PlanetSkill }) {
+function OrbitingPlanet({ planet, onClick }: { planet: PlanetSkill; onClick?: () => void }) {
   const { name, category, image, size, orbitA, orbitB, duration, startAngle, color } = planet;
 
   // Generate keyframes for elliptical orbit (smooth 360° path)
@@ -168,8 +168,9 @@ function OrbitingPlanet({ planet }: { planet: PlanetSkill }) {
 
   return (
     <motion.div
-      className="absolute pointer-events-auto cursor-default group"
+      className={`absolute pointer-events-auto group ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
       style={{ left: 0, top: 0 }}
+      onClick={onClick}
       animate={{
         x: xKeyframes,
         y: yKeyframes,
@@ -461,6 +462,7 @@ function useSeamlessVideoLoop() {
 export default function SkillsSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const { videoARef, videoBRef, activeVideo } = useSeamlessVideoLoop();
+  const [zoomedOnEarth, setZoomedOnEarth] = useState(false);
 
   return (
     <section
@@ -607,7 +609,11 @@ export default function SkillsSection() {
                   }}
                 >
                   {planets.map((p) => (
-                    <OrbitingPlanet key={p.planet} planet={p} />
+                    <OrbitingPlanet
+                      key={p.planet}
+                      planet={p}
+                      onClick={p.planet === 'Earth' ? () => setZoomedOnEarth(true) : undefined}
+                    />
                   ))}
                   {/* All planet moons */}
                   {planets.map((p) =>
@@ -645,6 +651,157 @@ export default function SkillsSection() {
           ))}
         </motion.div>
       </div>
+
+      {/* Earth Zoom-Through Transition to Projects */}
+      <AnimatePresence>
+        {zoomedOnEarth && (
+          <EarthZoomTransition onComplete={() => setZoomedOnEarth(false)} />
+        )}
+      </AnimatePresence>
     </section>
+  );
+}
+
+/* ─── Earth Zoom-Through Transition ─── */
+function EarthZoomTransition({ onComplete }: { onComplete: () => void }) {
+  const [phase, setPhase] = useState<'zoom-in' | 'zoom-deep' | 'fade-out'>('zoom-in');
+
+  useEffect(() => {
+    // Phase 1 → Phase 2: gentle zoom deeper after initial zoom
+    const t1 = setTimeout(() => setPhase('zoom-deep'), 1200);
+    // Phase 2 → Phase 3: fade out and scroll to projects
+    const t2 = setTimeout(() => {
+      setPhase('fade-out');
+      const projectsEl = document.getElementById('projects');
+      if (projectsEl) {
+        projectsEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 3000);
+    // Cleanup overlay
+    const t3 = setTimeout(() => onComplete(), 4000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, [onComplete]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse at center, #0a1628 0%, #000000 100%)' }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: phase === 'fade-out' ? 0 : 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: phase === 'fade-out' ? 1 : 0.6, ease: 'easeInOut' }}
+    >
+      {/* Stars streaking past during zoom */}
+      {Array.from({ length: 60 }).map((_, i) => {
+        const x = Math.random() * 100;
+        const y = Math.random() * 100;
+        return (
+          <motion.div
+            key={i}
+            className="absolute rounded-full bg-white"
+            style={{
+              width: 2,
+              height: phase === 'zoom-deep' ? 12 : 2,
+              top: `${y}%`,
+              left: `${x}%`,
+              transition: 'height 0.5s ease',
+            }}
+            animate={{
+              opacity: phase === 'zoom-deep' ? [0.8, 0] : [0.2, 0.6, 0.2],
+              y: phase === 'zoom-deep' ? [0, (y > 50 ? 200 : -200)] : 0,
+              x: phase === 'zoom-deep' ? [0, (x > 50 ? 100 : -100)] : 0,
+            }}
+            transition={{
+              duration: phase === 'zoom-deep' ? 1.5 : 2 + Math.random() * 2,
+              ease: 'easeOut',
+              repeat: phase === 'zoom-deep' ? 0 : Infinity,
+              delay: Math.random() * 0.5,
+            }}
+          />
+        );
+      })}
+
+      {/* Earth zooming in */}
+      <motion.div
+        className="relative flex flex-col items-center"
+        animate={{
+          scale: phase === 'zoom-in' ? 1 : phase === 'zoom-deep' ? 4 : 5,
+          opacity: phase === 'fade-out' ? 0 : 1,
+        }}
+        initial={{ scale: 0.1, opacity: 0 }}
+        transition={{
+          scale: {
+            duration: phase === 'zoom-in' ? 1 : 1.6,
+            ease: [0.25, 0.1, 0.25, 1],
+          },
+          opacity: { duration: 0.6, ease: 'easeInOut' },
+        }}
+      >
+        <div className="relative">
+          <div
+            className="rounded-full overflow-hidden"
+            style={{
+              width: 250,
+              height: 250,
+              boxShadow: '0 0 60px rgba(100,180,255,0.3), 0 0 120px rgba(50,120,200,0.15), inset -20px -10px 40px rgba(0,0,0,0.4)',
+            }}
+          >
+            <img
+              src="/earth.png"
+              alt="Earth"
+              className="w-full h-full object-cover"
+              draggable={false}
+            />
+          </div>
+
+          {/* Moon */}
+          <motion.div
+            className="absolute"
+            style={{ top: 125, left: 125 }}
+            animate={{
+              x: Array.from({ length: 121 }, (_, i) => Math.cos((i / 120) * Math.PI * 2) * 170 - 17),
+              y: Array.from({ length: 121 }, (_, i) => Math.sin((i / 120) * Math.PI * 2) * 170 - 17),
+            }}
+            transition={{ duration: 8, ease: 'linear', repeat: Infinity, repeatType: 'loop' }}
+          >
+            <div
+              className="rounded-full overflow-hidden"
+              style={{ width: 34, height: 34, boxShadow: '0 0 12px rgba(200,200,220,0.4)' }}
+            >
+              <img src="/moon.png" alt="Moon" className="w-full h-full object-cover rounded-full" draggable={false} />
+            </div>
+          </motion.div>
+
+          {/* Atmospheric glow */}
+          <motion.div
+            className="absolute inset-0 rounded-full"
+            style={{ boxShadow: '0 0 40px rgba(100,180,255,0.2)' }}
+            animate={{
+              boxShadow: [
+                '0 0 40px rgba(100,180,255,0.2)',
+                '0 0 60px rgba(100,180,255,0.35)',
+                '0 0 40px rgba(100,180,255,0.2)',
+              ],
+            }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+          />
+        </div>
+
+        {/* Label — only in phase 1 */}
+        <motion.div
+          className="mt-8 text-center"
+          animate={{ opacity: phase === 'zoom-in' ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          <h3
+            className="font-orbitron text-2xl font-bold tracking-wider"
+            style={{ color: '#e34c26', textShadow: '0 0 20px rgba(227,76,38,0.4)' }}
+          >
+            HTML / CSS
+          </h3>
+          <p className="font-exo text-sm text-[#94a3b8] mt-1 uppercase tracking-widest">Frontend</p>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 }

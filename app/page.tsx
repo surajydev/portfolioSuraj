@@ -9,7 +9,7 @@ import ProjectsSection from '@/components/sections/ProjectsSection';
 import EducationSection from '@/components/sections/EducationSection';
 import TrainingSection from '@/components/sections/TrainingSection';
 import CertificatesSection from '@/components/sections/CertificatesSection';
-import ContactSection from '@/components/sections/ContactSection';
+
 import Footer from '@/components/Footer';
 
 export default function Home() {
@@ -25,7 +25,7 @@ export default function Home() {
       <EducationSection />
       <TrainingSection />
       <CertificatesSection />
-      <ContactSection />
+
       <Footer />
     </main>
   );
