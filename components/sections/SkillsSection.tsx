@@ -2,7 +2,6 @@
 
 import { useRef } from 'react';
 import { motion } from 'framer-motion';
-import CosmicBackground from '../CosmicBackground';
 
 /* ─── Planet-Skill Mapping (ordered by priority, inner → outer orbit) ─── */
 /* Real solar system diameter ratios (relative to Earth = 1):
@@ -235,10 +234,21 @@ export default function SkillsSection() {
     <section
       ref={sectionRef}
       id="skills"
-      className="relative py-20 overflow-hidden section-highlight"
+      className="relative py-20 overflow-hidden"
       style={{ minHeight: '800px' }}
     >
-      <CosmicBackground variant="cluster" />
+      {/* Starry Night Sky Background */}
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/beautiful-view-stars-night-sky.jpg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'brightness(0.35) saturate(1.2)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#020817]/60 via-[#020817]/30 to-[#020817]/60" />
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#020817] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#020817] to-transparent" />
+      </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Section Title */}
