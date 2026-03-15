@@ -196,6 +196,7 @@ function OrbitingPlanet({ planet, onClick }: { planet: PlanetSkill; onClick?: ()
           src={image}
           alt={name}
           className="w-full h-full object-cover rounded-full"
+          style={{ animation: `planet-spin ${Math.max(4, size * 0.4)}s linear infinite` }}
           draggable={false}
         />
         {/* Hover glow ring */}
@@ -577,6 +578,7 @@ export default function SkillsSection() {
                       src="/sunnn.png"
                       alt="Sun — Skills Core"
                       className="w-full h-full object-cover rounded-full"
+                      style={{ animation: 'planet-spin 25s linear infinite' }}
                     />
                     <motion.div
                       className="absolute inset-0 rounded-full"
@@ -658,6 +660,13 @@ export default function SkillsSection() {
           <EarthZoomTransition onComplete={() => setZoomedOnEarth(false)} />
         )}
       </AnimatePresence>
+
+      <style>{`
+        @keyframes planet-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </section>
   );
 }
