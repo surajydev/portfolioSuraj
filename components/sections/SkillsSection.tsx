@@ -226,38 +226,86 @@ function OrbitingPlanet({ planet }: { planet: PlanetSkill }) {
   );
 }
 
-/* ─── Moon orbiting Earth (sub-orbit) ─── */
-const MOON_SIZE = 11; // ~0.27 × Earth (40px)
-const MOON_ORBIT_RADIUS = 32; // circular sub-orbit radius around Earth
-const MOON_DURATION = 5; // orbit period in seconds
+/* ─── Moon Configurations (real diameter ratios, min 3px for visibility) ─── */
+/* Moon/Planet real diameter ratios applied to UI planet sizes.
+   Mars moons are microscopic IRL but rendered at 3px minimum. */
+interface MoonConfig {
+  name: string;
+  size: number;
+  orbitRadius: number;
+  duration: number;
+  startAngle: number;
+}
 
-function OrbitingMoon() {
-  const earthData = planets.find((p) => p.planet === 'Earth')!;
-  const { orbitA, orbitB, duration, startAngle, size: earthSize } = earthData;
-  const earthHalf = earthSize / 2;
-  const moonHalf = MOON_SIZE / 2;
+const planetMoons: Record<string, MoonConfig[]> = {
+  // Earth (40px) — Moon: 3474/12742 = 0.27 → 11px
+  Earth: [
+    { name: 'Moon', size: 11, orbitRadius: 32, duration: 5, startAngle: 0 },
+  ],
+  // Mars (28px) — Phobos: 22/6779 ≈ 0.003, Deimos: 12/6779 ≈ 0.002 → 3px min
+  Mars: [
+    { name: 'Phobos', size: 3, orbitRadius: 20, duration: 2, startAngle: 0 },
+    { name: 'Deimos', size: 3, orbitRadius: 26, duration: 3.5, startAngle: 180 },
+  ],
+  // Jupiter (70px) — Galilean moons: Io/Europa/Ganymede/Callisto
+  Jupiter: [
+    { name: 'Io', size: 3, orbitRadius: 44, duration: 2.5, startAngle: 0 },
+    { name: 'Europa', size: 3, orbitRadius: 50, duration: 3.5, startAngle: 90 },
+    { name: 'Ganymede', size: 4, orbitRadius: 56, duration: 4.5, startAngle: 180 },
+    { name: 'Callisto', size: 4, orbitRadius: 62, duration: 6, startAngle: 270 },
+  ],
+  // Saturn (60px) — 7 major moons
+  Saturn: [
+    { name: 'Mimas', size: 3, orbitRadius: 36, duration: 2, startAngle: 0 },
+    { name: 'Enceladus', size: 3, orbitRadius: 40, duration: 2.5, startAngle: 51 },
+    { name: 'Tethys', size: 3, orbitRadius: 44, duration: 3, startAngle: 103 },
+    { name: 'Dione', size: 3, orbitRadius: 48, duration: 3.5, startAngle: 154 },
+    { name: 'Rhea', size: 3, orbitRadius: 52, duration: 4, startAngle: 206 },
+    { name: 'Titan', size: 4, orbitRadius: 58, duration: 5, startAngle: 257 },
+    { name: 'Iapetus', size: 3, orbitRadius: 64, duration: 6.5, startAngle: 309 },
+  ],
+  // Uranus (46px) — 5 major moons
+  Uranus: [
+    { name: 'Miranda', size: 3, orbitRadius: 28, duration: 2, startAngle: 0 },
+    { name: 'Ariel', size: 3, orbitRadius: 33, duration: 2.8, startAngle: 72 },
+    { name: 'Umbriel', size: 3, orbitRadius: 38, duration: 3.5, startAngle: 144 },
+    { name: 'Titania', size: 3, orbitRadius: 43, duration: 4.5, startAngle: 216 },
+    { name: 'Oberon', size: 3, orbitRadius: 48, duration: 5.5, startAngle: 288 },
+  ],
+  // Neptune (42px) — Triton + Nereid
+  Neptune: [
+    { name: 'Triton', size: 3, orbitRadius: 28, duration: 3, startAngle: 0 },
+    { name: 'Nereid', size: 3, orbitRadius: 36, duration: 5.5, startAngle: 180 },
+  ],
+  // Pluto (18px) — Charon: 1212/2377 = 0.51 → 9px
+  Pluto: [
+    { name: 'Charon', size: 9, orbitRadius: 16, duration: 3, startAngle: 0 },
+    { name: 'Nix', size: 3, orbitRadius: 22, duration: 4, startAngle: 72 },
+    { name: 'Hydra', size: 3, orbitRadius: 26, duration: 5, startAngle: 144 },
+    { name: 'Kerberos', size: 3, orbitRadius: 20, duration: 3.5, startAngle: 216 },
+    { name: 'Styx', size: 3, orbitRadius: 18, duration: 2.5, startAngle: 288 },
+  ],
+};
 
-  // We need to compute Earth's position at each frame
-  // then offset the moon's circular orbit around it
-  const steps = 360;
+/* ─── Generalized Moon Sub-Orbit Component ─── */
+function PlanetMoonOrbit({ planet, moon }: { planet: PlanetSkill; moon: MoonConfig }) {
+  const { orbitA, orbitB, duration: parentDuration, startAngle: parentStart } = planet;
+  const moonHalf = moon.size / 2;
+  const steps = 120;
   const xKeyframes: number[] = [];
   const yKeyframes: number[] = [];
 
   for (let i = 0; i <= steps; i++) {
-    // Earth's position on its solar orbit
-    const earthAngle = ((startAngle + (i / steps) * 360) * Math.PI) / 180;
-    const earthX = Math.cos(earthAngle) * orbitA;
-    const earthY = Math.sin(earthAngle) * orbitB;
-
-    // Moon's position on its sub-orbit around Earth
-    // Moon completes multiple orbits per one Earth orbit
-    const moonOrbitsPerEarthOrbit = duration / MOON_DURATION;
-    const moonAngle = ((i / steps) * 360 * moonOrbitsPerEarthOrbit * Math.PI) / 180;
-    const moonX = earthX + Math.cos(moonAngle) * MOON_ORBIT_RADIUS;
-    const moonY = earthY + Math.sin(moonAngle) * MOON_ORBIT_RADIUS;
-
-    xKeyframes.push(moonX - moonHalf);
-    yKeyframes.push(moonY - moonHalf);
+    const t = i / steps;
+    // Parent planet position on solar orbit
+    const pAngle = ((parentStart + t * 360) * Math.PI) / 180;
+    const pX = Math.cos(pAngle) * orbitA;
+    const pY = Math.sin(pAngle) * orbitB;
+    // Moon sub-orbit around parent
+    const moonRevs = parentDuration / moon.duration;
+    const mAngle = ((moon.startAngle + t * 360 * moonRevs) * Math.PI) / 180;
+    xKeyframes.push(pX + Math.cos(mAngle) * moon.orbitRadius - moonHalf);
+    yKeyframes.push(pY + Math.sin(mAngle) * moon.orbitRadius - moonHalf);
   }
 
   return (
@@ -265,24 +313,19 @@ function OrbitingMoon() {
       className="absolute pointer-events-none"
       style={{ left: 0, top: 0 }}
       animate={{ x: xKeyframes, y: yKeyframes }}
-      transition={{
-        duration,
-        ease: 'linear',
-        repeat: Infinity,
-        repeatType: 'loop',
-      }}
+      transition={{ duration: parentDuration, ease: 'linear', repeat: Infinity, repeatType: 'loop' }}
     >
       <div
         className="rounded-full overflow-hidden"
         style={{
-          width: MOON_SIZE,
-          height: MOON_SIZE,
-          boxShadow: '0 0 6px rgba(200,200,220,0.4), 0 0 2px rgba(200,200,220,0.6)',
+          width: moon.size,
+          height: moon.size,
+          boxShadow: `0 0 ${Math.max(3, moon.size * 0.5)}px rgba(200,200,220,0.4)`,
         }}
       >
         <img
           src="/moon.png"
-          alt="Moon"
+          alt={moon.name}
           className="w-full h-full object-cover rounded-full"
           draggable={false}
         />
@@ -566,8 +609,12 @@ export default function SkillsSection() {
                   {planets.map((p) => (
                     <OrbitingPlanet key={p.planet} planet={p} />
                   ))}
-                  {/* Moon sub-orbiting Earth */}
-                  <OrbitingMoon />
+                  {/* All planet moons */}
+                  {planets.map((p) =>
+                    (planetMoons[p.planet] || []).map((moon) => (
+                      <PlanetMoonOrbit key={`${p.planet}-${moon.name}`} planet={p} moon={moon} />
+                    ))
+                  )}
                 </div>
 
                 {/* Pole Star */}
