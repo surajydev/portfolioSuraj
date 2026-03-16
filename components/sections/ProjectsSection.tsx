@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Github, Star, ExternalLink } from 'lucide-react';
+// lucide-react icons available if needed
 import Image from 'next/image';
 import CosmicBackground from '../CosmicBackground';
 
@@ -15,6 +15,7 @@ interface Repo {
   updatedAt: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const LANG_COLORS: Record<string, string> = {
   JavaScript: '#f7df1e',
   TypeScript: '#3178c6',
@@ -26,6 +27,7 @@ const LANG_COLORS: Record<string, string> = {
   C: '#555555',
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -96,7 +98,7 @@ const fadeUp = {
 
 export default function ProjectsSection() {
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [activeProject, setActiveProject] = useState<number | null>(null);
 
   useEffect(() => {

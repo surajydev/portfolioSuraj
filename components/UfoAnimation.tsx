@@ -23,7 +23,7 @@ function randomEasing(): string {
 
 export default function UfoAnimation() {
   const imgRef = useRef<HTMLImageElement>(null);
-  const [visible, setVisible] = useState(false);
+  const [, setVisible] = useState(false);
   const animFrameRef = useRef<number>(0);
 
   useEffect(() => {

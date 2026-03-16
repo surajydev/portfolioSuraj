@@ -134,6 +134,7 @@ const planets: PlanetSkill[] = [
 ];
 
 /* ─── Orbit Path Component ─── */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function OrbitPath({ a, b }: { a: number; b: number; color: string }) {
   return (
     <ellipse

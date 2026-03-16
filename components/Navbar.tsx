@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Home, User, Briefcase, Cpu, Mail, Search, Menu, X, Sun, GraduationCap, Dumbbell, Award, FileText } from 'lucide-react';
@@ -390,7 +390,7 @@ export default function Navbar() {
                       onClick={(e) => {
                         e.preventDefault();
                         setMenuOpen(false);
-                        if ((item as any).isPage) {
+                        if ('isPage' in item && item.isPage) {
                           setTimeout(() => { window.location.href = item.href; }, 350);
                         } else {
                           const sectionId = item.href.replace('#', '');
