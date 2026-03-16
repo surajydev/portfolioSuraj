@@ -138,7 +138,11 @@ export default function EducationSection() {
                 borderRadius: '50%',
                 background: `radial-gradient(circle at 50% 100%, transparent ${innerPct}%, ${layer.innerColor} ${innerPct}%, ${layer.outerColor} 100%)`,
                 border: `1.5px solid ${layer.borderColor}`,
-                boxShadow: `inset 0 0 110px ${layer.borderColor}`,
+                boxShadow: [
+                  `inset 0 0 120px ${layer.borderColor}`,
+                  `inset 0 0 50px ${layer.borderColor}`,
+                  `inset 0 0 200px ${layer.innerColor.replace('0.5', '0.25')}`,
+                ].join(', '),
                 pointerEvents: 'auto',
                 ['--layer-border' as string]: layer.borderColor,
               }}
@@ -273,11 +277,11 @@ export default function EducationSection() {
           animation: earth-rotate 60s linear infinite;
         }
         .atmosphere-layer {
-          animation: atmosphere-pulse 3s ease-in-out infinite;
+          animation: atmosphere-pulse 4s ease-in-out infinite;
         }
         @keyframes atmosphere-pulse {
           0%, 100% { filter: brightness(1); }
-          50% { filter: brightness(1.4); }
+          50% { filter: brightness(1.5); }
         }
       `}</style>
     </section>
