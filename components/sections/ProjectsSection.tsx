@@ -109,6 +109,14 @@ export default function ProjectsSection() {
         setLoading(false);
       })
       .catch(() => setLoading(false));
+
+    // Load model-viewer script once
+    if (!customElements.get('model-viewer')) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+      document.head.appendChild(script);
+    }
   }, []);
 
   return (
@@ -254,14 +262,6 @@ export default function ProjectsSection() {
 
       {/* Elliptical orbital animation keyframes */}
       <style jsx>{`
-        @keyframes pulse-glow {
-          0%, 100% { box-shadow: 0 0 30px rgba(0, 102, 255, 0.4), 0 0 80px rgba(0, 102, 255, 0.15), 0 0 120px rgba(0, 102, 255, 0.05); }
-          50% { box-shadow: 0 0 50px rgba(0, 102, 255, 0.6), 0 0 100px rgba(0, 102, 255, 0.25), 0 0 150px rgba(0, 102, 255, 0.1); }
-        }
-        .earth-glow {
-          animation: pulse-glow 4s ease-in-out infinite;
-        }
-
         /* Elliptical orbit wrapper — each orbit is a rotated ellipse */
         .elliptical-orbit {
           position: absolute;
@@ -427,16 +427,18 @@ export default function ProjectsSection() {
             ))}
 
             {/* Earth Center — large */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none">
-              <div className="earth-glow rounded-full">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-auto">
+              <div className="rounded-full">
                 <div className="relative w-52 h-52 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden">
-                  <Image
-                    src="/earth.png"
-                    alt="Earth"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 208px, (max-width: 1024px) 256px, 320px"
-                    priority
+                  {/* @ts-ignore - model-viewer is a web component */}
+                  <model-viewer
+                    src="/earth.glb"
+                    alt="3D Earth Model"
+                    auto-rotate
+                    camera-controls
+                    disable-zoom
+                    disable-pan
+                    style={{ width: '100%', height: '100%', background: 'transparent' }}
                   />
                 </div>
               </div>

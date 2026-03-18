@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useInView } from 'framer-motion';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import CosmicBackground from '../CosmicBackground';
 
@@ -110,6 +110,16 @@ export default function EducationSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { amount: 0.3 });
 
+  useEffect(() => {
+    // Load model-viewer script once
+    if (!customElements.get('model-viewer')) {
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
+      document.head.appendChild(script);
+    }
+  }, []);
+
   return (
     <section ref={sectionRef} id="education" className="relative overflow-hidden" style={{ paddingTop: 64, paddingBottom: 0 }}>
       {/* Starry night background */}
@@ -161,13 +171,7 @@ export default function EducationSection() {
                 marginLeft: -radius,
                 bottom: -(radius) - 260,
                 borderRadius: '50%',
-                background: `radial-gradient(circle at 50% 100%, transparent ${innerPct}%, ${layer.innerColor} ${innerPct}%, ${layer.outerColor} 100%)`,
                 border: `1.5px solid ${layer.borderColor}`,
-                boxShadow: [
-                  `inset 0 0 80px ${layer.borderColor}`,
-                  `inset 0 0 40px ${layer.borderColor}`,
-                  `inset 0 0 150px ${layer.innerColor.replace('0.5', '0.15')}`,
-                ].join(', '),
                 pointerEvents: 'auto',
                 ['--layer-border' as string]: layer.borderColor,
                 ['--layer-glow' as string]: layer.innerColor,
@@ -246,34 +250,30 @@ export default function EducationSection() {
 
         {/* Earth — Large semicircle at bottom spanning full width */}
         <motion.div
-          className="absolute left-1/2 z-10"
+          className="absolute left-1/2 z-10 flex items-center justify-center pointer-events-auto"
           style={{
-            width: earthRadius * 2,
-            height: earthRadius * 2,
-            marginLeft: -earthRadius,
-            bottom: -(earthRadius) - 260,
-            borderRadius: '50%',
-            overflow: 'hidden',
+            width: 2000,
+            height: 2000,
+            marginLeft: -1000,
+            bottom: -900,
           }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, delay: 0.3 }}
         >
-          {/* Atmosphere glow on top edge */}
-          <div
-            className="absolute inset-0 rounded-full"
-            style={{
-              boxShadow: 'inset 0 -20px 60px rgba(0, 150, 255, 0.15), 0 0 80px rgba(0, 150, 255, 0.1)',
-            }}
-          />
-          <Image
-            src="/earth.png"
-            alt="Earth"
-            fill
-            className="object-cover earth-spin"
-            priority
-          />
+          <div className="relative w-80 h-80 md:w-[420px] md:h-[420px] lg:w-[550px] lg:h-[550px] rounded-full overflow-hidden">
+            {/* @ts-ignore - model-viewer is a web component */}
+            <model-viewer
+              src="/earth.glb"
+              alt="3D Earth Model"
+              auto-rotate
+              camera-controls
+              disable-zoom
+              disable-pan
+              style={{ width: '100%', height: '100%', background: 'transparent' }}
+            />
+          </div>
         </motion.div>
       </div>
 
