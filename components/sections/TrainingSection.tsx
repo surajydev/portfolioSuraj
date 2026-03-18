@@ -7,7 +7,6 @@ import CosmicBackground from '../CosmicBackground';
 import Image from 'next/image';
 
 const MOON_SIZE = 280;
-const STATION_SIZE = 80;
 
 const trainingBullets = [
   'Explored core Design Thinking concepts, improving ability to frame problems and identify user pain points through structured exercises.',
