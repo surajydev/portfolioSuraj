@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import CursorStars from "@/components/CursorStars";
 import AnimatedFavicon from "@/components/AnimatedFavicon";
+import Script from "next/script";
 export const metadata: Metadata = {
   title: "Suraj Yadav | Neural Network Portfolio",
   description:
@@ -35,6 +36,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          type="module"
+          src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
+          strategy="afterInteractive"
+        />
+      </head>
       <body className="font-exo antialiased bg-[#020817] text-[#e2e8f0]">
         <AnimatedFavicon />
         <CursorStars />

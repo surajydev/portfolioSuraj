@@ -2,7 +2,6 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect } from 'react';
-import Image from 'next/image';
 import CosmicBackground from '../CosmicBackground';
 
 interface Education {
@@ -152,8 +151,7 @@ export default function EducationSection() {
         {/* Each atmosphere layer as a concentric curved line with fill */}
         {layers.map((layer, idx) => {
           const radius = earthRadius + layerOffsets[idx];
-          const innerRadius = idx < layers.length - 1 ? earthRadius + layerOffsets[idx + 1] : earthRadius;
-          const innerPct = ((innerRadius / radius) * 100).toFixed(1);
+
 
           // Curved text positions (y within the circle SVG)
           // Per-layer vertical adjustments
@@ -263,7 +261,7 @@ export default function EducationSection() {
           transition={{ duration: 1, delay: 0.3 }}
         >
           <div className="relative w-80 h-80 md:w-[420px] md:h-[420px] lg:w-[550px] lg:h-[550px] rounded-full overflow-hidden">
-            {/* @ts-ignore - model-viewer is a web component */}
+            {/* @ts-expect-error - model-viewer is a web component */}
             <model-viewer
               src="/earth.glb"
               alt="3D Earth Model"

@@ -430,7 +430,7 @@ export default function ProjectsSection() {
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-auto">
               <div className="rounded-full">
                 <div className="relative w-52 h-52 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden">
-                  {/* @ts-ignore - model-viewer is a web component */}
+                  {/* @ts-expect-error - model-viewer is a web component */}
                   <model-viewer
                     src="/earth.glb"
                     alt="3D Earth Model"

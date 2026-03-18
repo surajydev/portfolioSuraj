@@ -3,10 +3,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Award, Navigation, Radio, Zap, Orbit, Clock, Weight, Gauge,
-  Shield, Wifi, Cpu, BarChart3, Target, Crosshair, Radar,
-  Satellite, Eye, Activity, Thermometer, Fuel, Signal,
+  Shield, Wifi, Cpu, Target, Crosshair, Radar,
+  Activity, Thermometer, Fuel, Signal,
 } from 'lucide-react';
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import CosmicBackground from '../CosmicBackground';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
@@ -80,20 +80,6 @@ const certificates = [
   },
 ];
 
-/* Every planet in the solar system for the viewport grid */
-const solarSystem = [
-  { name: 'Sun', img: '/sunnn.png', type: 'star' },
-  { name: 'Mercury', img: '/mercury.png', type: 'planet' },
-  { name: 'Venus', img: '/venus.jpeg', type: 'planet' },
-  { name: 'Earth', img: '/earth.png', type: 'planet' },
-  { name: 'Moon', img: '/moon.png', type: 'moon' },
-  { name: 'Mars', img: '/mars.jpeg', type: 'planet' },
-  { name: 'Jupiter', img: '/jupiter.png', type: 'planet' },
-  { name: 'Saturn', img: '/saturn.png', type: 'planet' },
-  { name: 'Uranus', img: '/uranus.png', type: 'planet' },
-  { name: 'Neptune', img: '/neptune.png', type: 'planet' },
-  { name: 'Pluto', img: '/pluto.png', type: 'dwarf' },
-];
 
 const probes = [
   { name: 'Voyager-1', img: '/voyager1.png', status: 'TRANSMITTING', dist: '24.1B km' },
@@ -226,8 +212,9 @@ function ProbeCard({ p }: { p: typeof probes[0] }) {
 
 export default function CertificatesSection() {
   const [selId, setSelId] = useState(certificates[0].id);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [lightning, setLightning] = useState(false);
-  const triggerLightning = () => { setLightning(true); setTimeout(() => setLightning(false), 600); };
+
   const [showCerts, setShowCerts] = useState(false);
   const [clock, setClock] = useState('00:00:00');
   const sel = certificates.find((c) => c.id === selId) || certificates[0];
@@ -508,7 +495,7 @@ export default function CertificatesSection() {
                   {/* 3D Spaceship model — X-ray look — clickable */}
                   <div className="absolute inset-0 flex items-center justify-center z-20 cursor-pointer"
                     onClick={() => setShowCerts(true)}>
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error - model-viewer is a web component */}
                     <model-viewer
                       src="/hull_spaceship.glb"
                       alt="Ship Schematic"

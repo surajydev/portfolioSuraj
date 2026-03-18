@@ -29,7 +29,7 @@ export default function TrainingSection() {
       >
         {/* Moon surface — fills the bottom, camera looks at it from front/slightly above */}
         <div className="absolute inset-0" style={{ zIndex: 1 }}>
-          {/* @ts-ignore */}
+          {/* @ts-expect-error - model-viewer is a web component */}
           <model-viewer
             src="/moon_surface.glb"
             alt="Moon Surface"
@@ -61,7 +61,7 @@ export default function TrainingSection() {
             animation: 'roverMove 22s linear infinite',
           }}
         >
-          {/* @ts-ignore */}
+          {/* @ts-expect-error - model-viewer is a web component */}
           <model-viewer
             src="/perseverance_mars_rover.glb"
             alt="Mars Rover"
