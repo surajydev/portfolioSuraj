@@ -109,14 +109,7 @@ export default function EducationSection() {
     }
   }, [handleWheel]);
 
-  useEffect(() => {
-    if (!customElements.get('model-viewer')) {
-      const script = document.createElement('script');
-      script.type = 'module';
-      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-      document.head.appendChild(script);
-    }
-  }, []);
+
 
   return (
     <section ref={sectionRef} id="education" className="relative" style={{ paddingTop: 64, paddingBottom: 0, contain: 'layout style', overflowX: 'clip', overflowY: 'visible' }}>
@@ -240,6 +233,8 @@ export default function EducationSection() {
               autoplay
               camera-controls
               disable-zoom
+              loading="eager"
+              reveal="auto"
               style={{ width: '100%', height: '100%', background: 'transparent' }}
             />
           </div>

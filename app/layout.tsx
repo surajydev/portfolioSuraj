@@ -37,10 +37,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* Preconnect to CDN domains for faster DNS + TLS */}
+        <link rel="preconnect" href="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://ajax.googleapis.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev" />
+        {/* Preload 3D models so download starts immediately */}
+        <link rel="preload" href="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev/earth1.glb" as="fetch" crossOrigin="anonymous" fetchPriority="high" />
+        <link rel="preload" href="/r2/hull_spaceship.glb" as="fetch" crossOrigin="anonymous" fetchPriority="high" />
+        <link rel="preload" href="/r2/earth_hologram.glb" as="fetch" crossOrigin="anonymous" fetchPriority="high" />
         <Script
           type="module"
           src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
       </head>
       <body className="font-exo antialiased bg-[#020817] text-[#e2e8f0]">

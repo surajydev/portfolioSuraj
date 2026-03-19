@@ -110,13 +110,7 @@ export default function ProjectsSection() {
       })
       .catch(() => setLoading(false));
 
-    // Load model-viewer script once
-    if (!customElements.get('model-viewer')) {
-      const script = document.createElement('script');
-      script.type = 'module';
-      script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js';
-      document.head.appendChild(script);
-    }
+
   }, []);
 
   return (
@@ -436,6 +430,8 @@ export default function ProjectsSection() {
                     alt="3D Earth Model"
                     autoplay
                     camera-controls
+                    loading="eager"
+                    reveal="auto"
                     style={{ width: '100%', height: '100%', background: 'transparent' }}
                   />
                 </div>

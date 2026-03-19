@@ -10,7 +10,7 @@ export default function EarthHologram() {
         auto-rotate
         camera-controls
         disable-zoom
-        loading="lazy"
+        loading="eager"
         reveal="auto"
         rotation-per-second="30deg"
         shadow-intensity="0"

@@ -502,7 +502,8 @@ export default function CertificatesSection() {
                       auto-rotate
                       camera-controls
                       disable-zoom
-                      loading="lazy"
+                      loading="eager"
+                      reveal="auto"
                       rotation-per-second="20deg"
                       shadow-intensity="0"
                       environment-image="neutral"
