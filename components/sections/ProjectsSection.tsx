@@ -432,12 +432,13 @@ export default function ProjectsSection() {
                 <div className="relative w-52 h-52 md:w-64 md:h-64 lg:w-80 lg:h-80 rounded-full overflow-hidden">
                   {/* @ts-expect-error - model-viewer is a web component */}
                   <model-viewer
-                    src="/earth.glb"
+                    src="/r2/earth.glb"
                     alt="3D Earth Model"
                     auto-rotate
                     camera-controls
                     disable-zoom
                     disable-pan
+                    loading="lazy"
                     style={{ width: '100%', height: '100%', background: 'transparent' }}
                   />
                 </div>

@@ -5,11 +5,13 @@ export default function EarthHologram() {
     <div className="w-full h-full flex items-center justify-center" style={{ minHeight: 180 }}>
       {/* @ts-expect-error - model-viewer is a web component */}
       <model-viewer
-        src="/earth_hologram.glb"
+        src="/r2/earth_hologram.glb"
         alt="Earth Hologram"
         auto-rotate
         camera-controls
         disable-zoom
+        loading="lazy"
+        reveal="auto"
         rotation-per-second="30deg"
         shadow-intensity="0"
         environment-image="neutral"

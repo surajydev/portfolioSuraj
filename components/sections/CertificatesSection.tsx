@@ -497,11 +497,12 @@ export default function CertificatesSection() {
                     onClick={() => setShowCerts(true)}>
                     {/* @ts-expect-error - model-viewer is a web component */}
                     <model-viewer
-                      src="/hull_spaceship.glb"
+                                            src="/r2/hull_spaceship.glb"
                       alt="Ship Schematic"
                       auto-rotate
                       camera-controls
                       disable-zoom
+                      loading="lazy"
                       rotation-per-second="20deg"
                       shadow-intensity="0"
                       environment-image="neutral"

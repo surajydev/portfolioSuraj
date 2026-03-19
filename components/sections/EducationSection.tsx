@@ -263,12 +263,13 @@ export default function EducationSection() {
           <div className="relative w-80 h-80 md:w-[420px] md:h-[420px] lg:w-[550px] lg:h-[550px] rounded-full overflow-hidden">
             {/* @ts-expect-error - model-viewer is a web component */}
             <model-viewer
-              src="/earth.glb"
+              src="/r2/earth.glb"
               alt="3D Earth Model"
               auto-rotate
               camera-controls
               disable-zoom
               disable-pan
+              loading="lazy"
               style={{ width: '100%', height: '100%', background: 'transparent' }}
             />
           </div>
