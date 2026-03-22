@@ -21,7 +21,7 @@ const menuItems = [
   { name: 'Education', icon: GraduationCap, color: '#60a5fa', subtitle: 'Academics', href: '#education' },
   { name: 'Training', icon: Dumbbell, color: '#f472b6', subtitle: 'Experience', href: '#training' },
   { name: 'Certificates', icon: Award, color: '#fb923c', subtitle: 'Achievements', href: '#certificates' },
-  { name: 'Contact', icon: Mail, color: '#f87171', subtitle: 'Connect', href: '#contact' },
+  { name: 'Contact', icon: Mail, color: '#f87171', subtitle: 'Connect', href: '/contact', isPage: true },
   { name: 'Resume', icon: FileText, color: '#2dd4bf', subtitle: 'Download CV', href: '/cv', isPage: true },
 ];
 

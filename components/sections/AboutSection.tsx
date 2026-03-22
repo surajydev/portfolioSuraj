@@ -291,16 +291,24 @@ export default function AboutSection() {
               <p className="font-exo text-[#94a3b8] leading-[1.9] text-[15px]">
                 I&apos;m a{' '}
                 <span className="text-[#00d4ff] hover-glow cursor-default">Computer Science Engineering</span>{' '}
-                student passionate about building{' '}
-                <span className="text-[#00ff9d] hover-glow cursor-default">scalable systems</span>{' '}
-                and{' '}
-                <span className="text-[#a78bfa] hover-glow cursor-default">intuitive interfaces</span>.
-                I blend backend engineering with UI/UX design thinking to craft products
-                that are both powerful and elegant. Whether it&apos;s architecting{' '}
-                <span className="text-[#00d4ff] hover-glow cursor-default">microservices with Spring Boot and Kafka</span>,
-                or wireframing pixel-perfect screens in{' '}
-                <span className="text-[#00ff9d] hover-glow cursor-default">Figma</span>{' '}
-                — I approach every challenge with curiosity and precision.
+                student and{' '}
+                <span className="text-[#a78bfa] hover-glow cursor-default">full-stack developer</span>{' '}
+                who enjoys building complete, end-to-end digital experiences. From designing clean,{' '}
+                <span className="text-[#00ff9d] hover-glow cursor-default">intuitive interfaces</span>{' '}
+                to developing{' '}
+                <span className="text-[#00d4ff] hover-glow cursor-default">scalable backend systems</span>,
+                I like bringing ideas to life across the entire stack. Whether it&apos;s working with{' '}
+                <span className="text-[#00d4ff] hover-glow cursor-default">Spring Boot and Kafka</span>{' '}
+                or creating designs in{' '}
+                <span className="text-[#00ff9d] hover-glow cursor-default">Figma</span>,
+                I focus on building solutions that are both functional and easy to use.
+              </p>
+              <p className="font-exo text-[#94a3b8] leading-[1.9] text-[15px] mt-4">
+                I bring a creative and research-driven approach to my work — I enjoy exploring new ideas,
+                understanding problems deeply, and finding smarter ways to solve them. My goal is to grow
+                into a skilled{' '}
+                <span className="text-[#a78bfa] hover-glow cursor-default">software engineer</span>{' '}
+                who builds impactful, scalable products and contributes to innovative, real-world solutions.
               </p>
             </motion.div>
 

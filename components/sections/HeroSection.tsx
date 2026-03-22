@@ -142,7 +142,7 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.2, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <div className="glass rounded-full px-4 py-1.5 inline-flex items-center gap-2 mb-8">
             <span className="w-2 h-2 rounded-full bg-[#00ff9d] animate-blink" />
@@ -166,7 +166,7 @@ export default function HeroSection() {
           }}
           initial={{ opacity: 0, scale: 0.9, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.9, type: 'spring', stiffness: 80 }}
+          transition={{ delay: 0.4, duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <TypingText text="Hi, I'm Suraj Yadav" speed={90} cursorColor="#00d4ff" pauseMs={3000} />
         </motion.h1>
@@ -175,7 +175,7 @@ export default function HeroSection() {
           className="h-10 mb-6 font-orbitron text-xl md:text-2xl text-[#94a3b8]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7, duration: 0.5 }}
+          transition={{ delay: 0.6, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <TypeAnimation
             sequence={[
@@ -198,7 +198,7 @@ export default function HeroSection() {
           className="font-exo text-[#c8d0dd] text-base md:text-lg max-w-2xl mb-10 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.6 }}
+          transition={{ delay: 0.8, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           CSE Student at Lovely Professional University · CGPA: <span className="text-[#00d4ff] font-semibold">8.60</span> · Building scalable systems &amp; intuitive interfaces.
         </motion.p>
@@ -207,7 +207,7 @@ export default function HeroSection() {
           className="flex flex-wrap items-center justify-center gap-4 mb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1, duration: 0.6 }}
+          transition={{ delay: 1.0, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <a
             href="#projects"
@@ -236,7 +236,7 @@ export default function HeroSection() {
           className="flex items-center gap-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.5 }}
+          transition={{ delay: 1.2, duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <a href="https://github.com/surajydev" target="_blank" rel="noopener noreferrer"
             className="glass w-11 h-11 rounded-full flex items-center justify-center hover:border-[#00d4ff]/60 hover:scale-[1.04] transition-all duration-300">
@@ -257,8 +257,8 @@ export default function HeroSection() {
       <motion.div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1, y: [0, 8, 0] }}
-        transition={{ delay: 2, duration: 2, repeat: Infinity }}
+        animate={{ opacity: 1, y: [0, 6, 0] }}
+        transition={{ delay: 2, duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
       >
         <ChevronDown size={24} className="text-[#00d4ff]/60" />
       </motion.div>

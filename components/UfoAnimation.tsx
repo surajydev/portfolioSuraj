@@ -59,22 +59,18 @@ export default function UfoAnimation() {
       const ty = rand(-35, 35); // vh from center
       const sc = rand(0.22, 0.72);
       const rot = rand(-22, 22);
-      const dur = rand(2.2, 5.5); // seconds
+      const dur = rand(2.2, 5.5);
       const opacity = rand(0.75, 1);
 
       el.style.transition = [
-        `left ${dur}s ${randomEasing()}`,
-        `top ${dur}s ${randomEasing()}`,
         `transform ${dur}s ${randomEasing()}`,
         `opacity ${dur * 0.6}s ease`,
       ].join(', ');
 
-      el.style.left = `calc(50% + ${tx}vw)`;
-      el.style.top = `calc(50% + ${ty}vh)`;
-      el.style.transform = `translate(-50%, -50%) scale(${sc}) rotate(${rot}deg)`;
+      el.style.transform = `translate(calc(-50% + ${tx}vw), calc(-50% + ${ty}vh)) scale(${sc}) rotate(${rot}deg)`;
       el.style.opacity = String(opacity);
 
-      return dur * 1000; // return duration in ms
+      return dur * 1000;
     }
 
     function startPatrol() {
@@ -118,9 +114,8 @@ export default function UfoAnimation() {
         height: 'auto',
         opacity: 0,
         transform: 'translate(-50%, -50%) scale(0.03)',
-        filter:
-          'drop-shadow(0 0 18px rgba(0,212,255,0.45)) drop-shadow(0 0 40px rgba(0,255,157,0.18))',
-        willChange: 'left, top, transform, opacity',
+        filter: 'drop-shadow(0 0 18px rgba(0,212,255,0.35))',
+        willChange: 'transform, opacity',
       }}
     />
   );

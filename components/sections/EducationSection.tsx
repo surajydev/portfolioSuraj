@@ -230,10 +230,9 @@ export default function EducationSection() {
                 borderRadius: '50%',
                 border: `1.5px solid ${layer.borderColor}`,
                 pointerEvents: 'auto',
-                willChange: 'transform, opacity',
                 transform: 'translateZ(0)',
-                boxShadow: `inset 0 0 80px ${layer.borderColor}, inset 0 0 40px ${layer.borderColor}, inset 0 0 120px ${layer.innerColor}`,
-                animation: `atmosphere-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite ${idx * 0.6}s, layer-glow-cascade 12s cubic-bezier(0.4, 0, 0.2, 1) infinite ${(4 - idx) * 1}s`,
+                boxShadow: `inset 0 0 60px ${layer.innerColor}`,
+                animation: `atmosphere-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite ${idx * 0.6}s`,
               }}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -295,7 +294,7 @@ export default function EducationSection() {
             height: 2000,
             marginLeft: -1000,
             bottom: -900,
-            willChange: 'transform, opacity',
+            willChange: 'opacity',
             transform: 'translateZ(0)',
           }}
           initial={{ opacity: 0, scale: 0.8 }}
@@ -325,7 +324,7 @@ export default function EducationSection() {
               disable-zoom
               disable-tap
               interaction-prompt="none"
-              loading="eager"
+              loading="lazy"
               reveal="auto"
               style={{ width: '100%', height: '100%', background: 'transparent' }}
             />
@@ -335,14 +334,7 @@ export default function EducationSection() {
 
       <style>{`
         .atmosphere-layer {
-          /* base — overridden inline with combined animations */
-        }
-        @keyframes layer-glow-cascade {
-          0% { filter: drop-shadow(0 0 0px transparent); }
-          5% { filter: drop-shadow(0 0 35px rgba(140, 210, 255, 0.6)); }
-          50% { filter: drop-shadow(0 0 35px rgba(140, 210, 255, 0.6)); }
-          62% { filter: drop-shadow(0 0 0px transparent); }
-          100% { filter: drop-shadow(0 0 0px transparent); }
+          animation: atmosphere-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
         @keyframes atmosphere-breathe {
           0%, 100% { opacity: 0.75; }
