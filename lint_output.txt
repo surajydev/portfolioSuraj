@@ -1,0 +1,47 @@
+﻿node.exe : 
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : NotSpeci  
+  fied: (:String) [   
+ ], RemoteExceptio    
+n
+    + FullyQualifiedE 
+   rrorId : NativeCo  
+  mmandError
+ 
+./app/layout.tsx
+43:9  Warning: Custom 
+fonts not added in 
+`pages/_document.js` 
+will only load for a 
+single page. This is 
+discouraged. See: http
+s://nextjs.org/docs/me
+ssages/no-page-custom-
+font  @next/next/no-pa
+ge-custom-font
+
+./components/sections/
+AboutSection.tsx
+5:8  Error: 
+'CosmicBackground' is 
+defined but never 
+used.  @typescript-esl
+int/no-unused-vars
+
+info  - Need to 
+disable some ESLint 
+rules? Learn more 
+here: https://nextjs.o
+rg/docs/basic-features
+/eslint#disabling-rule
+s

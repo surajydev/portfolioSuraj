@@ -116,10 +116,21 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" className="relative py-16 overflow-hidden section-highlight">
-      {/* Starry night background */}
+      {/* Video background */}
       <div className="absolute inset-0 z-0">
-        <img src="/beautiful-shot-starry-night-sky.jpg" alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-[#0a0e1a]/70" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          src="/323-135992580.mp4"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'brightness(0.55) saturate(1.2)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0e1a]/60 via-[#0a0e1a]/30 to-[#0a0e1a]/60" />
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0e1a] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0e1a] to-transparent" />
       </div>
       <CosmicBackground variant="constellation" />
 
@@ -263,14 +274,15 @@ export default function ProjectsSection() {
           left: 50%;
           top: 50%;
           transform-style: preserve-3d;
+          pointer-events: none;
         }
 
         /* Orbit 1: innermost, tilted -20deg */
         .orbit-path-1 {
-          width: 700px;
-          height: 270px;
-          margin-left: -350px;
-          margin-top: -135px;
+          width: 820px;
+          height: 320px;
+          margin-left: -410px;
+          margin-top: -160px;
           transform: rotateZ(-20deg);
         }
         /* Orbit 2: middle, tilted 25deg */
@@ -318,7 +330,7 @@ export default function ProjectsSection() {
         }
 
         .sat-mover-1 {
-          offset-path: ellipse(350px 135px);
+          offset-path: ellipse(410px 160px);
           offset-rotate: 0deg;
           animation: ellipse-revolve 20s linear infinite;
         }
@@ -360,24 +372,28 @@ export default function ProjectsSection() {
         .sat-mover-2 > div { transform: rotateZ(-25deg); }
         .sat-mover-3 > div { transform: rotateZ(45deg); }
 
+        .sat-mover-1, .sat-mover-2, .sat-mover-3 {
+          pointer-events: auto;
+        }
         .sat-mover-1:hover, .sat-mover-2:hover, .sat-mover-3:hover {
           animation-play-state: paused;
+          z-index: 50 !important;
         }
 
         /* Responsive scaling */
         @media (max-width: 1023px) {
-          .orbit-path-1 { width: 520px; height: 200px; margin-left: -260px; margin-top: -100px; }
+          .orbit-path-1 { width: 620px; height: 240px; margin-left: -310px; margin-top: -120px; }
           .orbit-path-2 { width: 660px; height: 255px; margin-left: -330px; margin-top: -127px; }
           .orbit-path-3 { width: 800px; height: 300px; margin-left: -400px; margin-top: -150px; }
-          .sat-mover-1 { offset-path: ellipse(260px 100px); offset-rotate: 0deg; }
+          .sat-mover-1 { offset-path: ellipse(310px 120px); offset-rotate: 0deg; }
           .sat-mover-2 { offset-path: ellipse(330px 127px); offset-rotate: 0deg; }
           .sat-mover-3 { offset-path: ellipse(400px 150px); offset-rotate: 0deg; }
         }
         @media (max-width: 767px) {
-          .orbit-path-1 { width: 380px; height: 146px; margin-left: -190px; margin-top: -73px; }
+          .orbit-path-1 { width: 450px; height: 174px; margin-left: -225px; margin-top: -87px; }
           .orbit-path-2 { width: 480px; height: 185px; margin-left: -240px; margin-top: -92px; }
           .orbit-path-3 { width: 580px; height: 220px; margin-left: -290px; margin-top: -110px; }
-          .sat-mover-1 { offset-path: ellipse(190px 73px); offset-rotate: 0deg; }
+          .sat-mover-1 { offset-path: ellipse(225px 87px); offset-rotate: 0deg; }
           .sat-mover-2 { offset-path: ellipse(240px 92px); offset-rotate: 0deg; }
           .sat-mover-3 { offset-path: ellipse(290px 110px); offset-rotate: 0deg; }
         }
@@ -430,7 +446,10 @@ export default function ProjectsSection() {
                     src="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev/earth1.glb"
                     alt="3D Earth Model"
                     autoplay
+                    auto-rotate
                     camera-controls
+                    interaction-prompt="none"
+                    disable-zoom
                     loading="eager"
                     reveal="auto"
                     style={{ width: '100%', height: '100%', background: 'transparent' }}
@@ -443,7 +462,7 @@ export default function ProjectsSection() {
             <div className="elliptical-orbit orbit-path-1 depth-wrap-1">
               <div className="sat-mover-1" style={{ position: 'absolute', left: 0, top: 0 }}>
                 <div
-                  className="relative group cursor-pointer pointer-events-auto"
+                  className="relative group cursor-pointer"
                   onClick={() => setActiveProject(activeProject === 0 ? null : 0)}
                 >
                   <div className="w-20 h-20 md:w-24 md:h-24 transition-all duration-300 hover:scale-125 drop-shadow-[0_0_12px_rgba(0,102,255,0.5)]">

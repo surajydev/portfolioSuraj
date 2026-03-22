@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import CosmicBackground from '../CosmicBackground';
 import TypingText from '../TypingText';
 
 /* ─── Animated counter ─── */

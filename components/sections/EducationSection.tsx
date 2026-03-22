@@ -114,10 +114,21 @@ export default function EducationSection() {
 
   return (
     <section ref={sectionRef} id="education" className="relative" style={{ paddingTop: 64, paddingBottom: 0, contain: 'layout style', overflowX: 'clip', overflowY: 'visible' }}>
-      {/* Starry night background */}
+      {/* Video background */}
       <div className="absolute inset-0 z-0">
-        <img src="/beautiful-shot-starry-night-sky.jpg" alt="" className="w-full h-full object-cover" />
-        <div className="absolute inset-0 bg-[#0a0e1a]/60" />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          src="/323-135992580.mp4"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: 'brightness(0.55) saturate(1.2)' }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0e1a]/60 via-[#0a0e1a]/30 to-[#0a0e1a]/60" />
+        <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-[#0a0e1a] to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-[#0a0e1a] to-transparent" />
       </div>
       <CosmicBackground variant="aurora" />
 
@@ -222,7 +233,7 @@ export default function EducationSection() {
                 willChange: 'transform, opacity',
                 transform: 'translateZ(0)',
                 boxShadow: `inset 0 0 80px ${layer.borderColor}, inset 0 0 40px ${layer.borderColor}, inset 0 0 120px ${layer.innerColor}`,
-                animationDelay: `${idx * 0.6}s`,
+                animation: `atmosphere-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite ${idx * 0.6}s, layer-glow-cascade 12s cubic-bezier(0.4, 0, 0.2, 1) infinite ${(4 - idx) * 1}s`,
               }}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -324,7 +335,14 @@ export default function EducationSection() {
 
       <style>{`
         .atmosphere-layer {
-          animation: atmosphere-breathe 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+          /* base — overridden inline with combined animations */
+        }
+        @keyframes layer-glow-cascade {
+          0% { filter: drop-shadow(0 0 0px transparent); }
+          5% { filter: drop-shadow(0 0 35px rgba(140, 210, 255, 0.6)); }
+          50% { filter: drop-shadow(0 0 35px rgba(140, 210, 255, 0.6)); }
+          62% { filter: drop-shadow(0 0 0px transparent); }
+          100% { filter: drop-shadow(0 0 0px transparent); }
         }
         @keyframes atmosphere-breathe {
           0%, 100% { opacity: 0.75; }

@@ -329,13 +329,13 @@ export default function TrainingSection() {
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <div className="flex items-center justify-center gap-3 mb-1">
             <Sparkles size={16} className="text-[#a78bfa]" />
-            <h3 className="font-orbitron text-sm md:text-base font-bold text-[#a78bfa] uppercase tracking-[0.35em]"
+            <h3 className="font-orbitron text-lg md:text-xl font-bold text-[#a78bfa] uppercase tracking-[0.35em]"
               style={{ textShadow: '0 0 15px rgba(167,139,250,0.3)' }}>
-              Field Operations
+              <TypingText text="Field Operations" speed={80} cursorColor="#a78bfa" />
             </h3>
             <Sparkles size={16} className="text-[#a78bfa]" />
           </div>
-          <p className="font-orbitron text-[7px] tracking-[0.5em] text-[#334155]">
+          <p className="font-orbitron text-[12px] tracking-[0.5em] text-[#334155]">
             EXTRA-CURRICULAR ACTIVITIES • FIELD DEPLOYMENT LOG
           </p>
           <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#a78bfa] to-transparent opacity-20" />
@@ -471,13 +471,13 @@ export default function TrainingSection() {
           viewport={{ once: true }} transition={{ duration: 0.5 }}>
           <div className="flex items-center justify-center gap-3 mb-1">
             <Award size={16} className="text-[#f59e0b]" />
-            <h3 className="font-orbitron text-sm md:text-base font-bold text-[#f59e0b] uppercase tracking-[0.35em]"
+            <h3 className="font-orbitron text-lg md:text-xl font-bold text-[#f59e0b] uppercase tracking-[0.35em]"
               style={{ textShadow: '0 0 15px rgba(245,158,11,0.3)' }}>
-              Achievements
+              <TypingText text="Achievements" speed={80} cursorColor="#f59e0b" />
             </h3>
             <Award size={16} className="text-[#f59e0b]" />
           </div>
-          <p className="font-orbitron text-[7px] tracking-[0.5em] text-[#334155]">
+          <p className="font-orbitron text-[12px] tracking-[0.5em] text-[#334155]">
             RECOGNITION &amp; MILESTONES • COMMENDATION LOG
           </p>
           <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent opacity-20" />
