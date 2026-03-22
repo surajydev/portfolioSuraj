@@ -215,7 +215,7 @@ export default function Navbar() {
           
           {/* Left: Branding (Sun + Name + Orbiting Planets) */}
           <div className="flex-1 flex items-center relative z-40">
-            <div ref={brandingRef} className="flex items-center gap-4 cursor-pointer" onClick={() => { if (isMobile) setIsMobileExpanded(!isMobileExpanded); }}>
+            <div ref={brandingRef} className="flex items-center gap-4 cursor-pointer" onClick={() => { if (isMobile) { setIsMobileExpanded(!isMobileExpanded); } else { window.location.href = '/'; } }}>
               
               {/* Solar System (Sun + Planets) */}
               <div className="relative flex items-center justify-center min-w-[140px] sm:min-w-[180px]" style={{ marginLeft: '-20px' }}>
@@ -397,6 +397,9 @@ export default function Navbar() {
                           const el = document.getElementById(sectionId);
                           if (el) {
                             setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 350);
+                          } else {
+                            // Not on home page — navigate there with hash
+                            setTimeout(() => { window.location.href = `/${item.href}`; }, 350);
                           }
                         }
                       }}

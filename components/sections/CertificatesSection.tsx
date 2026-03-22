@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 
@@ -198,9 +199,9 @@ function ProbeCard({ p }: { p: typeof probes[0] }) {
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-1">
           <div className="w-1 h-1 rounded-full bg-[#00ff9d]" style={{ boxShadow: '0 0 3px #00ff9d', animation: 'breathe 2s ease-in-out infinite' }} />
-          <span className="font-orbitron text-[7px] tracking-wider text-[#64748b]">{p.name}</span>
+          <span className="font-orbitron text-[9px] tracking-wider text-[#64748b]">{p.name}</span>
         </div>
-        <span className="font-orbitron text-[6px] text-[#334155]">{p.status} • {p.dist}</span>
+        <span className="font-orbitron text-[8px] text-[#334155]">{p.status} • {p.dist}</span>
       </div>
     </div>
   );
@@ -259,10 +260,10 @@ export default function CertificatesSection() {
         <motion.div className="mb-6 text-center" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <div className="flex items-center justify-center gap-3 mb-1">
             <Radar size={20} className="text-[#00b4d8]" />
-            <h2 className="font-orbitron text-lg md:text-xl font-bold text-[#00b4d8] text-glow-teal uppercase tracking-[0.35em]">Starship Command</h2>
+            <h2 className="font-orbitron text-lg md:text-xl font-bold text-[#00b4d8] text-glow-teal uppercase tracking-[0.35em]"><TypingText text="Starship Command" speed={70} cursorColor="#00b4d8" /></h2>
             <Radar size={20} className="text-[#00b4d8]" style={{ transform: 'scaleX(-1)' }} />
           </div>
-          <p className="font-orbitron text-[8px] tracking-[0.5em] text-[#334155]">CERTIFICATES & CREDENTIALS • NAVIGATION CONSOLE v4.7</p>
+          <p className="font-orbitron text-[10px] tracking-[0.5em] text-[#94a3b8]" style={{ textShadow: '0 0 8px rgba(0,180,216,0.3)' }}>CERTIFICATES & CREDENTIALS • NAVIGATION CONSOLE v4.7</p>
           <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#00b4d8] to-transparent opacity-25" />
         </motion.div>
 
@@ -278,17 +279,17 @@ export default function CertificatesSection() {
           {/* ── Top Status Bar ── */}
           <div className="flex items-center justify-between px-3 py-1.5 flex-wrap gap-x-4 gap-y-1" style={{ borderBottom: '1px solid rgba(0,212,255,0.05)', background: 'rgba(0,212,255,0.015)' }}>
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#00ff9d]" style={{ boxShadow: '0 0 4px #00ff9d' }} /><span className="font-orbitron text-[7px] tracking-widest text-[#00ff9d]">ONLINE</span></span>
-              <span className="font-orbitron text-[7px] text-[#1e293b]">|</span>
-              <span className="flex items-center gap-1"><Shield size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">SHIELD 98.2%</span></span>
-              <span className="flex items-center gap-1"><Cpu size={9} className="text-[#0066ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">CPU 12%</span></span>
-              <span className="flex items-center gap-1"><Fuel size={9} className="text-[#00ff9d] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">FUEL 87%</span></span>
+              <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#00ff9d]" style={{ boxShadow: '0 0 4px #00ff9d' }} /><span className="font-orbitron text-[9px] tracking-widest text-[#00ff9d]">ONLINE</span></span>
+              <span className="font-orbitron text-[9px] text-[#1e293b]">|</span>
+              <span className="flex items-center gap-1"><Shield size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[9px] text-[#334155]">SHIELD 98.2%</span></span>
+              <span className="flex items-center gap-1"><Cpu size={9} className="text-[#0066ff] opacity-40" /><span className="font-orbitron text-[9px] text-[#334155]">CPU 12%</span></span>
+              <span className="flex items-center gap-1"><Fuel size={9} className="text-[#00ff9d] opacity-40" /><span className="font-orbitron text-[9px] text-[#334155]">FUEL 87%</span></span>
             </div>
-            <span className="flex items-center gap-1"><Clock size={9} className="text-[#475569]" /><span className="font-orbitron text-[8px] text-[#64748b]">T+ {clock}</span></span>
+            <span className="flex items-center gap-1"><Clock size={9} className="text-[#475569]" /><span className="font-orbitron text-[10px] text-[#64748b]">T+ {clock}</span></span>
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1"><Signal size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">SIG 100%</span></span>
-              <span className="flex items-center gap-1"><Wifi size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">COMM</span></span>
-              <span className="flex items-center gap-1"><Radio size={9} className="text-[#00d4ff]" style={{ animation: 'breathe 2s ease-in-out infinite' }} /><span className="font-orbitron text-[7px] text-[#475569]">ACTIVE</span></span>
+              <span className="flex items-center gap-1"><Signal size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[9px] text-[#334155]">SIG 100%</span></span>
+              <span className="flex items-center gap-1"><Wifi size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[9px] text-[#334155]">COMM</span></span>
+              <span className="flex items-center gap-1"><Radio size={9} className="text-[#00d4ff]" style={{ animation: 'breathe 2s ease-in-out infinite' }} /><span className="font-orbitron text-[9px] text-[#475569]">ACTIVE</span></span>
             </div>
           </div>
 
@@ -301,7 +302,7 @@ export default function CertificatesSection() {
               {/* Target destinations */}
               <div className="flex items-center gap-1 mb-1">
                 <Target size={9} className="text-[#475569]" />
-                <span className="font-orbitron text-[6px] tracking-[0.3em] text-[#475569]">TARGET DESTINATIONS</span>
+                <span className="font-orbitron text-[8px] tracking-[0.3em] text-[#475569]">TARGET DESTINATIONS</span>
               </div>
               {certificates.map((c) => {
                 const active = c.id === selId;
@@ -314,12 +315,12 @@ export default function CertificatesSection() {
                       <Image src={c.planetImg} alt={c.planet} width={30} height={30} className="rounded-full object-cover shrink-0"
                         style={{ filter: active ? `drop-shadow(0 0 6px ${c.color}80)` : 'brightness(0.4)' }} />
                       <div className="min-w-0 flex-1">
-                        <p className="font-orbitron text-[8px] tracking-wider" style={{ color: c.color, opacity: active ? 1 : 0.5 }}>{c.planet}</p>
-                        <p className="font-exo text-[9px] text-[#94a3b8] truncate" style={{ opacity: active ? 0.9 : 0.4 }}>{c.title}</p>
+                        <p className="font-orbitron text-[10px] tracking-wider" style={{ color: c.color, opacity: active ? 1 : 0.5 }}>{c.planet}</p>
+                        <p className="font-exo text-[11px] text-[#94a3b8] truncate" style={{ opacity: active ? 0.9 : 0.4 }}>{c.title}</p>
                         <div className="flex gap-2 mt-0.5">
-                          <span className="font-orbitron text-[6px] text-[#3e4c5e]">{c.distance}ly</span>
-                          <span className="font-orbitron text-[6px] text-[#3e4c5e]">{c.gravity}g</span>
-                          <span className="font-orbitron text-[6px] text-[#3e4c5e]">{c.vel}c</span>
+                          <span className="font-orbitron text-[8px] text-[#3e4c5e]">{c.distance}ly</span>
+                          <span className="font-orbitron text-[8px] text-[#3e4c5e]">{c.gravity}g</span>
+                          <span className="font-orbitron text-[8px] text-[#3e4c5e]">{c.vel}c</span>
                         </div>
                       </div>
                     </div>
@@ -329,7 +330,7 @@ export default function CertificatesSection() {
 
               {/* Signal waveforms */}
               <div className="pt-1.5" style={{ borderTop: '1px solid rgba(0,212,255,0.03)' }}>
-                <span className="font-orbitron text-[5px] tracking-[0.3em] text-[#1e293b]">SIGNAL WAVEFORMS</span>
+                <span className="font-orbitron text-[7px] tracking-[0.3em] text-[#1e293b]">SIGNAL WAVEFORMS</span>
                 {certificates.map((c) => (
                   <div key={c.id} className="relative">
                     <Wave color={c.color} freq={c.freq} active={c.id === selId} />
@@ -340,19 +341,19 @@ export default function CertificatesSection() {
 
               {/* Column bars */}
               <div className="pt-1.5" style={{ borderTop: '1px solid rgba(0,212,255,0.03)' }}>
-                <span className="font-orbitron text-[5px] tracking-[0.3em] text-[#1e293b]">POWER OUTPUT</span>
+                <span className="font-orbitron text-[7px] tracking-[0.3em] text-[#1e293b]">POWER OUTPUT</span>
                 <BarCols color={sel.color} count={12} />
               </div>
 
               {/* Dot matrix */}
               <div className="pt-1.5" style={{ borderTop: '1px solid rgba(0,212,255,0.03)' }}>
-                <span className="font-orbitron text-[5px] tracking-[0.3em] text-[#1e293b]">SENSOR ARRAY</span>
+                <span className="font-orbitron text-[7px] tracking-[0.3em] text-[#1e293b]">SENSOR ARRAY</span>
                 <DotGrid color={sel.color} rows={5} cols={10} />
               </div>
 
               {/* Probe tracker */}
               <div className="pt-1.5 space-y-1" style={{ borderTop: '1px solid rgba(0,212,255,0.03)' }}>
-                <span className="font-orbitron text-[5px] tracking-[0.3em] text-[#1e293b]">PROBE TRACKER</span>
+                <span className="font-orbitron text-[7px] tracking-[0.3em] text-[#1e293b]">PROBE TRACKER</span>
                 {probes.map((p, i) => <ProbeCard key={i} p={p} />)}
               </div>
             </div>
@@ -363,24 +364,24 @@ export default function CertificatesSection() {
               {/* ── Top Instrument Strip ── */}
               <div className="w-full flex items-center justify-between px-2 py-1.5 mb-2 rounded-md" style={{ background: 'rgba(0,212,255,0.02)', border: '1px solid rgba(0,212,255,0.04)' }}>
                 <div className="text-center">
-                  <span className="font-orbitron text-[5px] tracking-[0.2em] text-[#334155] block">HEADING</span>
-                  <span className="font-orbitron text-[11px] text-[#00d4ff]">247.3°</span>
+                  <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#334155] block">HEADING</span>
+                  <span className="font-orbitron text-[13px] text-[#00d4ff]">247.3°</span>
                 </div>
                 <div className="text-center">
-                  <span className="font-orbitron text-[5px] tracking-[0.2em] text-[#334155] block">PITCH</span>
-                  <span className="font-orbitron text-[11px] text-[#00ff9d]">+12.4°</span>
+                  <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#334155] block">PITCH</span>
+                  <span className="font-orbitron text-[13px] text-[#00ff9d]">+12.4°</span>
                 </div>
                 <div className="text-center">
-                  <span className="font-orbitron text-[5px] tracking-[0.2em] text-[#334155] block">SECTOR</span>
-                  <span className="font-orbitron text-[11px] text-[#0066ff]">7-G α</span>
+                  <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#334155] block">SECTOR</span>
+                  <span className="font-orbitron text-[13px] text-[#0066ff]">7-G α</span>
                 </div>
                 <div className="text-center">
-                  <span className="font-orbitron text-[5px] tracking-[0.2em] text-[#334155] block">ALTITUDE</span>
-                  <span className="font-orbitron text-[11px] text-[#00d4ff]">∞</span>
+                  <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#334155] block">ALTITUDE</span>
+                  <span className="font-orbitron text-[13px] text-[#00d4ff]">∞</span>
                 </div>
                 <div className="text-center">
-                  <span className="font-orbitron text-[5px] tracking-[0.2em] text-[#334155] block">SPEED</span>
-                  <motion.span className="font-orbitron text-[11px]" style={{ color: sel.color }}
+                  <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#334155] block">SPEED</span>
+                  <motion.span className="font-orbitron text-[13px]" style={{ color: sel.color }}
                     key={sel.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
                     {sel.vel}c
                   </motion.span>
@@ -400,8 +401,8 @@ export default function CertificatesSection() {
                     { l: 'WARP', v: `${sel.vel}c`, c: sel.color },
                   ].map(({ l, v, c }) => (
                     <div key={l} className="text-right">
-                      <span className="font-orbitron text-[5px] tracking-[0.15em] text-[#1e293b] block">{l}</span>
-                      <span className="font-orbitron text-[9px]" style={{ color: c }}>{v}</span>
+                      <span className="font-orbitron text-[7px] tracking-[0.15em] text-[#1e293b] block">{l}</span>
+                      <span className="font-orbitron text-[11px]" style={{ color: c }}>{v}</span>
                       <div className="h-px mt-0.5" style={{ background: `linear-gradient(90deg, transparent, ${c}20)` }} />
                     </div>
                   ))}
@@ -587,8 +588,8 @@ export default function CertificatesSection() {
                     { l: 'FUEL', v: `${sel.fuel}PJ`, c: sel.color },
                   ].map(({ l, v, c }) => (
                     <div key={l} className="text-left">
-                      <span className="font-orbitron text-[5px] tracking-[0.15em] text-[#1e293b] block">{l}</span>
-                      <span className="font-orbitron text-[9px]" style={{ color: c }}>{v}</span>
+                      <span className="font-orbitron text-[7px] tracking-[0.15em] text-[#1e293b] block">{l}</span>
+                      <span className="font-orbitron text-[11px]" style={{ color: c }}>{v}</span>
                       <div className="h-px mt-0.5" style={{ background: `linear-gradient(270deg, transparent, ${c}20)` }} />
                     </div>
                   ))}
@@ -650,14 +651,14 @@ export default function CertificatesSection() {
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-orbitron text-sm font-semibold tracking-wider" style={{ color: sel.color, textShadow: `0 0 8px ${sel.color}30` }}>{sel.planet}</h3>
-                          <p className="font-exo text-[10px] text-[#94a3b8] mt-0.5">{sel.title}</p>
-                          <p className="font-exo text-[8px] text-[#4a5568]">{sel.issuer} • {sel.date}</p>
+                          <h3 className="font-orbitron text-base font-semibold tracking-wider" style={{ color: sel.color, textShadow: `0 0 8px ${sel.color}30` }}>{sel.planet}</h3>
+                          <p className="font-exo text-sm text-[#94a3b8] mt-0.5">{sel.title}</p>
+                          <p className="font-exo text-xs text-[#4a5568]">{sel.issuer} • {sel.date}</p>
                           <div className="flex gap-3 mt-2">
-                            <span className="font-orbitron text-[8px]" style={{ color: sel.color }}>{sel.distance}ly</span>
-                            <span className="font-orbitron text-[8px]" style={{ color: sel.color }}>{sel.gravity}g</span>
-                            <span className="font-orbitron text-[8px]" style={{ color: sel.color }}>{sel.vel}c</span>
-                            <span className="font-orbitron text-[8px]" style={{ color: sel.color }}>{sel.temp}</span>
+                            <span className="font-orbitron text-[10px]" style={{ color: sel.color }}>{sel.distance}ly</span>
+                            <span className="font-orbitron text-[10px]" style={{ color: sel.color }}>{sel.gravity}g</span>
+                            <span className="font-orbitron text-[10px]" style={{ color: sel.color }}>{sel.vel}c</span>
+                            <span className="font-orbitron text-[10px]" style={{ color: sel.color }}>{sel.temp}</span>
                           </div>
                           <Wave color={sel.color} freq={sel.freq} active={true} />
                         </div>

@@ -3,6 +3,7 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState, useCallback } from 'react';
 import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 
 interface Education {
   institution: string;
@@ -119,6 +120,81 @@ export default function EducationSection() {
         <div className="absolute inset-0 bg-[#0a0e1a]/60" />
       </div>
       <CosmicBackground variant="aurora" />
+
+      {/* Section Heading */}
+      <motion.div className="relative z-10 text-center mb-8 -mt-8"
+        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }} transition={{ duration: 0.6 }}>
+        <h2 className="font-orbitron text-2xl md:text-3xl font-bold uppercase tracking-wider"
+          style={{ background: 'linear-gradient(135deg, #e2e8f0 0%, #00d4ff 40%, #0066ff 70%, #00ff9d 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+          <TypingText text="Education" speed={80} cursorColor="#00d4ff" pauseMs={3000} />
+        </h2>
+        <div className="h-0.5 mt-4 mx-auto w-24 bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent" />
+      </motion.div>
+
+      {/* Voyager 1 Satellite */}
+      <motion.div
+        className="absolute z-[6] pointer-events-none"
+        style={{ top: '32.5%', right: '8%' }}
+        animate={{
+          x: [0, 30, -15, 25, -10, 0],
+          y: [0, -20, 10, -25, 15, 0],
+          rotate: [0, 5, -3, 4, -2, 0],
+        }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <motion.img
+          src="/voyager1.png"
+          alt="Voyager 1"
+          className="w-[60px] md:w-[80px] object-contain"
+          style={{ filter: 'drop-shadow(0 0 15px rgba(0,212,255,0.5)) drop-shadow(0 0 30px rgba(0,212,255,0.2))' }}
+          animate={{ scale: [1, 1.05, 0.98, 1.03, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </motion.div>
+
+      {/* Hot Air Balloon */}
+      <motion.div
+        className="absolute z-[6] pointer-events-none"
+        style={{ bottom: '25%', left: '20%' }}
+        animate={{
+          x: [0, 40, -20, 50, -30, 20, 0],
+          y: [0, -30, -10, -40, -5, -25, 0],
+          rotate: [0, 3, -2, 4, -3, 2, 0],
+        }}
+        transition={{ duration: 22, repeat: Infinity, ease: 'easeInOut' }}
+      >
+        <motion.img
+          src="/—Pngtree—hot air baloon vector_12161839.png"
+          alt="Hot Air Balloon"
+          className="w-[70px] md:w-[100px] object-contain"
+          style={{ filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.4)) drop-shadow(0 0 20px rgba(255,158,0,0.15))' }}
+          animate={{ y: [0, -8, 4, -6, 2, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </motion.div>
+
+      {/* Wind particle lines */}
+      {[...Array(6)].map((_, i) => (
+        <motion.div
+          key={`wind-${i}`}
+          className="absolute z-[5] pointer-events-none"
+          style={{
+            top: `${15 + i * 12}%`,
+            left: '-10%',
+            width: `${60 + Math.random() * 80}px`,
+            height: '1px',
+            background: `linear-gradient(90deg, transparent, rgba(255,255,255,${0.04 + Math.random() * 0.06}), transparent)`,
+          }}
+          animate={{ x: ['0vw', '120vw'] }}
+          transition={{
+            duration: 8 + Math.random() * 6,
+            repeat: Infinity,
+            delay: i * 1.5,
+            ease: 'linear',
+          }}
+        />
+      ))}
 
       {/* Atmosphere lines + Earth container */}
       <div

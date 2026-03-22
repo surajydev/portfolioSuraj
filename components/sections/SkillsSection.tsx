@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import TypingText from '../TypingText';
 
 /* ─── Planet-Skill Mapping (ordered by priority, inner → outer orbit) ─── */
 /* Real solar system diameter ratios (relative to Earth = 1):
@@ -516,7 +517,7 @@ export default function SkillsSection() {
           transition={{ duration: 0.6 }}
         >
           <h2 className="font-orbitron text-3xl md:text-4xl font-bold text-white uppercase tracking-wider hover-glow cursor-default">
-            Skills
+            <TypingText text="Skills" speed={80} cursorColor="#00ff9d" />
           </h2>
           <p className="font-exo text-sm text-[#94a3b8] mt-2">Each planet orbits a skill — closer means higher priority</p>
           <div className="h-0.5 mt-3 mx-auto w-24 bg-gradient-to-r from-transparent via-[#00ff9d] to-transparent" />

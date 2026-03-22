@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { TypeAnimation } from 'react-type-animation';
 import { Github, Linkedin, Mail, ChevronDown } from 'lucide-react';
 import UfoAnimation from '@/components/UfoAnimation';
+import TypingText from '../TypingText';
 
 export default function HeroSection() {
   const videoARef = useRef<HTMLVideoElement>(null);
@@ -150,13 +151,24 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.h1
-          className="font-orbitron font-bold text-glow-cyan leading-tight mb-6"
-          style={{ fontSize: 'clamp(2.5rem, 6vw, 5rem)' }}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.7 }}
+          className="text-glow-cyan leading-tight mb-6 whitespace-nowrap"
+          style={{
+            fontSize: 'clamp(2.5rem, 5.5vw, 4.5rem)',
+            fontFamily: '"Doto", sans-serif',
+            fontWeight: 900,
+            fontStyle: 'normal',
+            letterSpacing: '0.06em',
+            fontVariationSettings: '"ROND" 12',
+            background: 'linear-gradient(135deg, #e2e8f0 0%, #00d4ff 40%, #0066ff 70%, #00ff9d 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}
+          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.9, type: 'spring', stiffness: 80 }}
         >
-          Hi, I&apos;m <span className="text-[#00d4ff]">Suraj Yadav</span>
+          <TypingText text="Hi, I'm Suraj Yadav" speed={90} cursorColor="#00d4ff" pauseMs={3000} />
         </motion.h1>
 
         <motion.div

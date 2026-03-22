@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, Linkedin, Github } from 'lucide-react';
 import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 
 const contactInfo = [
   {
@@ -77,7 +78,7 @@ export default function ContactSection() {
           variants={fadeUp}
         >
           <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00d4ff] text-glow-cyan uppercase">
-            Get In Touch
+            <TypingText text="Get In Touch" speed={70} cursorColor="#00d4ff" />
           </h2>
           <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent" />
         </motion.div>

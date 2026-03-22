@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 // lucide-react icons available if needed
 import Image from 'next/image';
 import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 
 interface Repo {
   name: string;
@@ -391,7 +392,7 @@ export default function ProjectsSection() {
           variants={fadeUp}
         >
           <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#0066ff] text-glow-blue uppercase hover-glow cursor-default">
-            Projects
+            <TypingText text="Projects" speed={80} cursorColor="#0066ff" />
           </h2>
         </motion.div>
 
@@ -503,66 +504,107 @@ export default function ProjectsSection() {
         {/* Project detail card overlay */}
         {activeProject !== null && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-4"
             onClick={() => setActiveProject(null)}
           >
-            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
-            <div
-              className="relative glass rounded-xl p-6 md:p-8 max-w-lg w-full z-10"
-              style={{
-                borderLeftWidth: '4px',
-                borderLeftColor: featuredProjects[activeProject].color,
-                boxShadow: `0 8px 40px ${featuredProjects[activeProject].color}30`,
-              }}
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.85, y: 40 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+              className="relative max-w-lg w-full z-10"
               onClick={(e) => e.stopPropagation()}
             >
-              <button
-                onClick={() => setActiveProject(null)}
-                className="absolute top-3 right-3 text-[#94a3b8] hover:text-white text-lg"
-              >✕</button>
-              <div className="flex items-center justify-between mb-3">
-                <span className="font-exo text-xs text-[#94a3b8]">{featuredProjects[activeProject].date}</span>
-                <span
-                  className="font-exo text-xs px-3 py-1 rounded-full"
-                  style={{
-                    color: featuredProjects[activeProject].statusColor,
-                    backgroundColor: `${featuredProjects[activeProject].statusColor}15`,
-                    border: `1px solid ${featuredProjects[activeProject].statusColor}30`,
-                  }}
+              {/* VIBGYOR animated border */}
+              <div
+                className="rounded-2xl p-[2px] overflow-hidden vibgyor-border"
+              >
+                {/* Inner glassmorphism card */}
+                <div
+                  className="rounded-2xl p-6 md:p-8 relative overflow-hidden"
+                  style={{ background: 'rgba(8, 12, 30, 0.88)', backdropFilter: 'blur(20px)' }}
                 >
-                  {featuredProjects[activeProject].status}
-                </span>
-              </div>
-              <h4 className="font-orbitron text-lg font-semibold text-[#e2e8f0] mb-1">{featuredProjects[activeProject].title}</h4>
-              <p className="font-exo text-sm text-[#94a3b8] mb-4">{featuredProjects[activeProject].subtitle}</p>
-              <ul className="space-y-2 mb-4">
-                {featuredProjects[activeProject].bullets.map((b, i) => (
-                  <li key={i} className="font-exo text-xs text-[#94a3b8] leading-relaxed flex gap-2">
-                    <span style={{ color: featuredProjects[activeProject].color }} className="mt-0.5 flex-shrink-0">▹</span>
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="flex flex-wrap gap-1.5 mb-3">
-                {featuredProjects[activeProject].tech.map((t) => (
-                  <span key={t} className="font-exo text-[10px] px-2 py-0.5 rounded border border-[#94a3b8]/20 text-[#94a3b8] bg-[#0f172a]/50">
-                    {t}
-                  </span>
-                ))}
-              </div>
-              {featuredProjects[activeProject].stats.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {featuredProjects[activeProject].stats.map((s) => (
-                    <span key={s} className="font-orbitron text-[9px] px-2 py-1 rounded-full" style={{ color: featuredProjects[activeProject]!.color, backgroundColor: `${featuredProjects[activeProject]!.color}10`, border: `1px solid ${featuredProjects[activeProject]!.color}25` }}>
-                      {s}
-                    </span>
-                  ))}
+                  {/* Ambient glows */}
+                  <div className="absolute inset-0 rounded-2xl pointer-events-none" style={{ background: `radial-gradient(ellipse at 30% 20%, ${featuredProjects[activeProject].color}15 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(0,212,255,0.06) 0%, transparent 50%)` }} />
+                  <motion.div className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none" style={{ background: `radial-gradient(circle, ${featuredProjects[activeProject].color}20, transparent 70%)` }} animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0.8, 0.5] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} />
+                  <motion.div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, rgba(0,180,216,0.15), transparent 70%)' }} animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.7, 0.4] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }} />
+
+                  <button onClick={() => setActiveProject(null)} className="absolute top-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-[#94a3b8] hover:text-white hover:bg-white/10 transition-all z-10">✕</button>
+
+                  {/* Header */}
+                  <div className="flex items-center justify-between mb-4 relative z-10">
+                    <motion.span className="font-exo text-sm text-[#c4b5fd]" initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}>
+                      {featuredProjects[activeProject].date}
+                    </motion.span>
+                    <motion.span className="font-exo text-xs px-3 py-1 rounded-full" style={{ color: featuredProjects[activeProject].statusColor, background: `linear-gradient(135deg, ${featuredProjects[activeProject].statusColor}15, ${featuredProjects[activeProject].statusColor}08)`, border: `1px solid ${featuredProjects[activeProject].statusColor}40`, boxShadow: `0 0 10px ${featuredProjects[activeProject].statusColor}15` }} initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}>
+                      {featuredProjects[activeProject].status}
+                    </motion.span>
+                  </div>
+
+                  {/* Title with gradient */}
+                  <motion.h4 className="font-orbitron text-xl font-bold mb-1 relative z-10" style={{ background: `linear-gradient(135deg, ${featuredProjects[activeProject].color}, #00d4ff, #00ff9d)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+                    {featuredProjects[activeProject].title}
+                  </motion.h4>
+                  <motion.p className="font-exo text-sm text-[#a5b4fc] mb-5 relative z-10" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}>
+                    {featuredProjects[activeProject].subtitle}
+                  </motion.p>
+
+                  {/* Bullets with VIBGYOR arrows */}
+                  <ul className="space-y-3 mb-5 relative z-10">
+                    {featuredProjects[activeProject].bullets.map((b, i) => (
+                      <motion.li key={i} className="font-exo text-sm text-[#cbd5e1] leading-relaxed flex gap-3" initial={{ opacity: 0, x: -15 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.08 }}>
+                        <span className="mt-1 flex-shrink-0 text-lg" style={{ color: featuredProjects[activeProject].color }}>▹</span>
+                        <span>{b}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
+
+                  {/* Tech badges — rainbow colored */}
+                  <motion.div className="flex flex-wrap gap-2 mb-4 relative z-10" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}>
+                    {featuredProjects[activeProject].tech.map((t, i) => {
+                      const vc = ['#00d4ff', '#0066ff', '#00ff9d', '#00b4d8', '#3b82f6', '#06b6d4', '#22d3ee'][i % 7];
+                      return (
+                        <span key={t} className="font-exo text-xs px-3 py-1 rounded-full transition-all duration-300 hover:scale-105" style={{ color: vc, background: `${vc}12`, border: `1px solid ${vc}35`, boxShadow: `0 0 8px ${vc}10` }}>
+                          {t}
+                        </span>
+                      );
+                    })}
+                  </motion.div>
+
+                  {/* Stats */}
+                  {featuredProjects[activeProject].stats.length > 0 && (
+                    <motion.div className="flex flex-wrap gap-2 relative z-10" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
+                      {featuredProjects[activeProject].stats.map((s) => (
+                        <span key={s} className="font-orbitron text-[10px] px-3 py-1.5 rounded-full" style={{ color: featuredProjects[activeProject]!.color, background: `linear-gradient(135deg, ${featuredProjects[activeProject]!.color}12, ${featuredProjects[activeProject]!.color}06)`, border: `1px solid ${featuredProjects[activeProject]!.color}30`, boxShadow: `0 0 12px ${featuredProjects[activeProject]!.color}10` }}>
+                          {s}
+                        </span>
+                      ))}
+                    </motion.div>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            </motion.div>
+
+            {/* VIBGYOR animation */}
+            <style>{`
+              .vibgyor-border {
+                background: conic-gradient(from var(--vb-angle, 0deg), #00d4ff, #0066ff, #00ff9d, #00b4d8, #3b82f6, #06b6d4, #00d4ff);
+                animation: vb-spin 6s linear infinite;
+              }
+              @property --vb-angle {
+                syntax: '<angle>';
+                initial-value: 0deg;
+                inherits: false;
+              }
+              @keyframes vb-spin {
+                to { --vb-angle: 360deg; }
+              }
+            `}</style>
           </motion.div>
         )}
       </div>

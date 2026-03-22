@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 
 /* ═══════════════════════════════════════════
    DATA
@@ -167,11 +168,11 @@ export default function TrainingSection() {
             <Rocket size={20} className="text-[#f472b6]" />
             <h2 className="font-orbitron text-lg md:text-xl font-bold text-[#f472b6] uppercase tracking-[0.35em]"
               style={{ textShadow: '0 0 20px rgba(244,114,182,0.3)' }}>
-              Mission Control
+              <TypingText text="Mission Control" speed={70} cursorColor="#f472b6" />
             </h2>
             <Rocket size={20} className="text-[#f472b6]" style={{ transform: 'scaleX(-1)' }} />
           </div>
-          <p className="font-orbitron text-[8px] tracking-[0.5em] text-[#334155]">
+          <p className="font-orbitron text-[12px] font-semibold tracking-[0.5em] text-[#94a3b8]" style={{ textShadow: '0 0 8px rgba(244,114,182,0.3)' }}>
             TRAINING &amp; ACTIVITIES • DEEP SPACE OPERATIONS LOG v3.0
           </p>
           <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#f472b6] to-transparent opacity-25" />
@@ -224,12 +225,12 @@ export default function TrainingSection() {
                   style={{ color: training.color, textShadow: `0 0 15px ${training.color}30` }}>
                   {training.title}
                 </h3>
-                <p className="font-exo text-sm md:text-base text-[#cbd5e1] mb-1">{training.subtitle}</p>
+                <p className="font-exo text-base md:text-lg text-[#cbd5e1] mb-1">{training.subtitle}</p>
                 <div className="flex items-center gap-4 mb-2">
-                  <span className="flex items-center gap-1"><MapPin size={12} className="text-[#475569]" /><span className="font-exo text-xs text-[#94a3b8]">{training.location}</span></span>
-                  <span className="flex items-center gap-1"><Calendar size={12} className="text-[#475569]" /><span className="font-exo text-xs text-[#94a3b8]">{training.date}</span></span>
+                  <span className="flex items-center gap-1"><MapPin size={14} className="text-[#475569]" /><span className="font-exo text-sm text-[#94a3b8]">{training.location}</span></span>
+                  <span className="flex items-center gap-1"><Calendar size={14} className="text-[#475569]" /><span className="font-exo text-sm text-[#94a3b8]">{training.date}</span></span>
                 </div>
-                <p className="font-exo text-sm text-[#64748b] leading-relaxed max-w-2xl">{training.description}</p>
+                <p className="font-exo text-base text-[#64748b] leading-relaxed max-w-2xl">{training.description}</p>
               </div>
 
               {/* Progress ring */}
@@ -252,7 +253,7 @@ export default function TrainingSection() {
                 style={{ background: 'rgba(0,212,255,0.02)', border: '1px solid rgba(0,212,255,0.05)' }}>
                 <div className="flex items-center gap-1.5 mb-3">
                   <Crosshair size={12} style={{ color: training.color }} />
-                  <span className="font-orbitron text-[8px] tracking-[0.2em] text-[#475569]">MISSION OBJECTIVES</span>
+                  <span className="font-orbitron text-[10px] tracking-[0.2em] text-[#475569]">MISSION OBJECTIVES</span>
                 </div>
 
                 <div className="space-y-3">
@@ -262,7 +263,7 @@ export default function TrainingSection() {
                       viewport={{ once: true }} transition={{ delay: i * 0.12, duration: 0.4 }}>
                       <ChevronRight size={14} style={{ color: training.color, marginTop: 2 }}
                         className="shrink-0" />
-                      <p className="font-exo text-xs text-[#94a3b8] leading-relaxed">{h}</p>
+                      <p className="font-exo text-sm text-[#94a3b8] leading-relaxed">{h}</p>
                     </motion.div>
                   ))}
                 </div>
@@ -274,7 +275,7 @@ export default function TrainingSection() {
                 <span className="font-orbitron text-[8px] tracking-[0.2em] text-[#334155] block mb-3">TECH ARSENAL</span>
                 <div className="flex flex-col gap-2">
                   {training.tech.map((t) => (
-                    <div key={t} className="flex items-center gap-2 font-exo text-xs px-3 py-1.5 rounded-md"
+                    <div key={t} className="flex items-center gap-2 font-exo text-sm px-3 py-2 rounded-md"
                       style={{
                         color: training.color,
                         background: `${training.color}08`,
@@ -422,7 +423,7 @@ export default function TrainingSection() {
                         style={{ color: act.color, textShadow: isHovered ? `0 0 8px ${act.color}30` : 'none' }}>
                         {act.title}
                       </h4>
-                      <p className="font-exo text-xs text-[#7c8ca3] leading-relaxed">
+                      <p className="font-exo text-sm text-[#7c8ca3] leading-relaxed">
                         {act.description}
                       </p>
                     </div>
@@ -554,7 +555,7 @@ export default function TrainingSection() {
                         style={{ color: ach.color, textShadow: isHovered ? `0 0 10px ${ach.color}30` : 'none' }}>
                         {ach.title}
                       </h4>
-                      <p className="font-exo text-xs text-[#7c8ca3] leading-relaxed max-w-2xl">
+                      <p className="font-exo text-sm text-[#7c8ca3] leading-relaxed max-w-2xl">
                         {ach.description}
                       </p>
                     </div>

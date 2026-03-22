@@ -2,6 +2,8 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
+import CosmicBackground from '../CosmicBackground';
+import TypingText from '../TypingText';
 
 /* ─── Animated counter ─── */
 function AnimatedNumber({ target, duration = 1000 }: { target: number; duration?: number }) {
@@ -150,7 +152,7 @@ export default function AboutSection() {
           variants={fadeUp}
         >
           <h2 className="font-orbitron text-2xl md:text-3xl font-bold text-[#00d4ff] text-glow-cyan uppercase inline-block hover-glow cursor-default">
-            About Me
+            <TypingText text="About Me" speed={80} cursorColor="#00d4ff" />
           </h2>
           <div className="h-0.5 mt-2 bg-gradient-to-r from-transparent via-[#00d4ff] to-transparent" />
         </motion.div>
@@ -351,25 +353,63 @@ export default function AboutSection() {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                {hobbies.map((hobby) => (
-                  <motion.div
-                    key={hobby.label}
-                    variants={fadeIn}
-                    whileHover={{ y: -4, scale: 1.05 }}
-                    className="glass rounded-xl px-3 py-3 text-center cursor-default hover:border-[#00ff9d]/40 transition-all duration-300 group"
-                  >
+                {hobbies.map((hobby, i) => {
+                  const colors = [
+                    { border: '#ff006e', glow: 'rgba(255, 0, 110, 0.4)', bg: 'rgba(255, 0, 110, 0.08)' },
+                    { border: '#8338ec', glow: 'rgba(131, 56, 236, 0.4)', bg: 'rgba(131, 56, 236, 0.08)' },
+                    { border: '#00d4ff', glow: 'rgba(0, 212, 255, 0.4)', bg: 'rgba(0, 212, 255, 0.08)' },
+                    { border: '#ff9e00', glow: 'rgba(255, 158, 0, 0.4)', bg: 'rgba(255, 158, 0, 0.08)' },
+                    { border: '#00ff9d', glow: 'rgba(0, 255, 157, 0.4)', bg: 'rgba(0, 255, 157, 0.08)' },
+                    { border: '#fb5607', glow: 'rgba(251, 86, 7, 0.4)', bg: 'rgba(251, 86, 7, 0.08)' },
+                  ];
+                  const c = colors[i % colors.length];
+                  return (
                     <motion.div
-                      className="text-xl mb-1.5"
-                      whileHover={{ scale: 1.3, rotate: [0, -10, 10, 0] }}
-                      transition={{ duration: 0.4 }}
+                      key={hobby.label}
+                      variants={fadeIn}
+                      whileHover={{ y: -6, scale: 1.08 }}
+                      className="relative rounded-xl px-3 py-4 text-center cursor-default group overflow-hidden"
+                      style={{
+                        background: c.bg,
+                        border: `1.5px solid ${c.border}40`,
+                        animation: `hobbyGlow${i} 3s ease-in-out infinite`,
+                      }}
                     >
-                      {hobby.emoji}
+                      {/* Animated moving shadow */}
+                      <motion.div
+                        className="absolute inset-0 rounded-xl pointer-events-none"
+                        animate={{
+                          boxShadow: [
+                            `0 0 15px ${c.glow}, inset 0 0 10px ${c.bg}`,
+                            `0 4px 25px ${c.glow}, 0 0 40px ${c.glow.replace('0.4', '0.15')}, inset 0 0 15px ${c.bg}`,
+                            `0 0 15px ${c.glow}, inset 0 0 10px ${c.bg}`,
+                          ],
+                        }}
+                        transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.3 }}
+                      />
+                      {/* Top accent line */}
+                      <motion.div
+                        className="absolute top-0 left-0 right-0 h-[2px]"
+                        style={{ background: `linear-gradient(90deg, transparent, ${c.border}, transparent)` }}
+                        animate={{ opacity: [0.4, 1, 0.4] }}
+                        transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                      />
+                      <motion.div
+                        className="text-2xl mb-2 relative z-10"
+                        whileHover={{ scale: 1.4, rotate: [0, -15, 15, 0] }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        {hobby.emoji}
+                      </motion.div>
+                      <div
+                        className="font-exo text-[10px] relative z-10 transition-colors duration-300"
+                        style={{ color: c.border }}
+                      >
+                        {hobby.label}
+                      </div>
                     </motion.div>
-                    <div className="font-exo text-[10px] text-[#94a3b8] group-hover:text-[#e2e8f0] transition-colors duration-300">
-                      {hobby.label}
-                    </div>
-                  </motion.div>
-                ))}
+                  );
+                })}
               </motion.div>
             </motion.div>
           </div>

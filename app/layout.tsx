@@ -38,6 +38,9 @@ export default function RootLayout({
     <html lang="en">
       <head>
         {/* Preconnect to CDN domains for faster DNS + TLS */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:ital,wght@0,1..900;1,1..900&family=Doto:ROND,wght@12,900&display=swap" rel="stylesheet" />
         <link rel="preconnect" href="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://ajax.googleapis.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev" />
