@@ -220,6 +220,7 @@ export default function EducationSection() {
             ref={earthRef}
             className="relative w-[400px] h-[400px] md:w-[550px] md:h-[550px] lg:w-[576px] lg:h-[576px] rounded-full cursor-grab active:cursor-grabbing"
             onMouseLeave={() => setEarthScale(1)}
+            onDoubleClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
             style={{
               transform: `scale(${earthScale})`,
               transition: earthScale === 1 ? 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)' : 'transform 0.15s ease-out',
@@ -231,8 +232,12 @@ export default function EducationSection() {
               src="https://pub-37f5a13b98614f0ebd7e5db4e5874f30.r2.dev/earth1.glb"
               alt="3D Earth Model"
               autoplay
+              auto-rotate
+              rotation-per-second="15deg"
               camera-controls
               disable-zoom
+              disable-tap
+              interaction-prompt="none"
               loading="eager"
               reveal="auto"
               style={{ width: '100%', height: '100%', background: 'transparent' }}

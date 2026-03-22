@@ -1,84 +1,77 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
-  Rocket, Radio, Wifi, Shield, Cpu, Clock, Zap, Target,
-  Navigation, Orbit, Radar, Activity, Signal, Crosshair,
-  ChevronRight, MapPin, Calendar,
+  Rocket, Shield, Cpu, Clock, Zap,
+  ChevronRight, MapPin, Calendar, Users, Trophy, TreePine,
+  Sparkles, Medal, Crosshair, Signal, Radio, Award,
 } from 'lucide-react';
 import { useState, useEffect, useMemo } from 'react';
 import CosmicBackground from '../CosmicBackground';
 
 /* ═══════════════════════════════════════════
-   TRAINING / EXPERIENCE DATA
+   DATA
    ═══════════════════════════════════════════ */
 
-const missions = [
+const training = {
+  title: 'Think Design Prototype',
+  subtitle: 'Design Thinking and Figma',
+  location: 'Remote',
+  date: 'Jun 2025 – Jul 2025',
+  status: 'COMPLETED',
+  color: '#00d4ff',
+  description: 'Explored core Design Thinking concepts and practiced Figma for wireframing and prototyping.',
+  highlights: [
+    'Explored core Design Thinking concepts, improving ability to frame problems and identify user pain points by around 30% through structured exercises',
+    'Practiced Figma for wireframing and prototyping, strengthening layout and interaction design skills by nearly 40% across weekly tasks',
+    'Learned to apply user feedback and design principles to refine interfaces, enhancing usability evaluation skills by about 25% during guided reviews',
+  ],
+  tech: ['Figma', 'Design Thinking Frameworks', 'UX Research Tools'],
+};
+
+const activities = [
   {
-    id: 'mission-alpha',
-    codename: 'MISSION ALPHA',
-    title: 'Flutter Developer Intern',
-    organization: 'Jeevani Health',
-    location: 'Remote',
-    date: 'Jan 2025 – Present',
-    status: 'ACTIVE',
-    statusColor: '#00ff9d',
-    color: '#00d4ff',
-    dim: 'rgba(0,212,255,0.08)',
-    progress: 85,
-    description: 'Building cross-platform healthcare mobile applications with Flutter and Dart.',
-    highlights: [
-      'Developed responsive UI components for patient management system',
-      'Integrated REST APIs and state management using Provider/Riverpod',
-      'Implemented real-time notification system for healthcare alerts',
-      'Collaborated with backend team for secure medical data handling',
-    ],
-    tech: ['Flutter', 'Dart', 'REST APIs', 'Firebase', 'Provider'],
-    metrics: { systems: 12, uptime: '99.2%', missions: 3 },
-  },
-  {
-    id: 'mission-beta',
-    codename: 'MISSION BETA',
-    title: 'Campus Ambassador',
-    organization: 'Internshala',
-    location: 'LPU, Punjab',
-    date: 'Aug 2024 – Dec 2024',
-    status: 'COMPLETED',
-    statusColor: '#0066ff',
-    color: '#0066ff',
-    dim: 'rgba(0,102,255,0.08)',
-    progress: 100,
-    description: 'Led campus outreach and student engagement programs for career development.',
-    highlights: [
-      'Organized workshop events reaching 200+ students on campus',
-      'Created social media campaigns increasing platform sign-ups by 35%',
-      'Mentored peers on internship applications and profile optimization',
-      'Awarded Top Performer for consistent engagement metrics',
-    ],
-    tech: ['Marketing', 'Leadership', 'Event Management', 'Communication'],
-    metrics: { systems: 8, uptime: '100%', missions: 5 },
-  },
-  {
-    id: 'mission-gamma',
-    codename: 'MISSION GAMMA',
-    title: 'Web Development Trainee',
-    organization: 'Bharat Intern',
-    location: 'Remote',
-    date: 'Jun 2024 – Aug 2024',
-    status: 'COMPLETED',
-    statusColor: '#0066ff',
+    id: 'act-1',
+    title: 'NGO Community Drives',
+    description: 'Led NGO-based community drives, coordinating awareness and plantation activities with 50+ participants',
+    icon: TreePine,
     color: '#00ff9d',
-    dim: 'rgba(0,255,157,0.08)',
-    progress: 100,
-    description: 'Intensive training in full-stack web development with modern frameworks.',
-    highlights: [
-      'Built 3 production-ready web applications during training period',
-      'Mastered responsive design patterns and accessibility standards',
-      'Learned Git workflow, code review practices, and CI/CD basics',
-      'Received certification with distinction for outstanding performance',
-    ],
-    tech: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'Git'],
-    metrics: { systems: 6, uptime: '98.7%', missions: 3 },
+    stat: '50+',
+    statLabel: 'PARTICIPANTS',
+    tag: 'LEADERSHIP',
+  },
+  {
+    id: 'act-2',
+    title: 'Binary Blitz Hackathon',
+    description: 'Participated in the Binary Blitz hackathon and qualified for the second round among 20+ competing teams',
+    icon: Trophy,
+    color: '#f59e0b',
+    stat: 'R2',
+    statLabel: 'QUALIFIED',
+    tag: 'HACKATHON',
+  },
+  {
+    id: 'act-3',
+    title: 'Inter Hostel Competition',
+    description: 'Organized event operations as a Student Coordinator during the Inter Hostel Competition for 100+ students',
+    icon: Users,
+    color: '#a78bfa',
+    stat: '100+',
+    statLabel: 'STUDENTS',
+    tag: 'COORDINATION',
+  },
+];
+
+const achievements = [
+  {
+    id: 'ach-1',
+    title: 'GFG Innovathon — 3rd Rank',
+    description: 'Achieved 3rd rank in the GeeksforGeeks Innovathon, competing against numerous teams with an innovative solution',
+    icon: Medal,
+    color: '#f472b6',
+    stat: '3rd',
+    statLabel: 'RANK',
+    tag: 'ACHIEVEMENT',
   },
 ];
 
@@ -86,30 +79,7 @@ const missions = [
    SUB-COMPONENTS
    ═══════════════════════════════════════════ */
 
-/* Animated signal wave */
-function SignalWave({ color, active }: { color: string; active: boolean }) {
-  const pts = useMemo(() => {
-    const a: string[] = [];
-    for (let i = 0; i <= 200; i += 2) {
-      a.push(`${i},${20 + Math.sin((i / 200) * Math.PI * 4) * (active ? 12 : 3)}`);
-    }
-    return a.join(' ');
-  }, [active]);
-  return (
-    <svg viewBox="0 0 200 40" className="w-full h-5" preserveAspectRatio="none">
-      <polyline fill="none" stroke={color} strokeWidth={active ? 1.5 : 0.5}
-        strokeOpacity={active ? 0.9 : 0.2} points={pts}
-        style={{
-          strokeDasharray: '4 2',
-          animation: active ? 'waveMove 1.5s linear infinite' : 'none',
-          filter: active ? `drop-shadow(0 0 3px ${color})` : 'none',
-        }} />
-    </svg>
-  );
-}
-
-/* Progress ring */
-function ProgressRing({ val, color, size = 56 }: { val: number; color: string; size?: number }) {
+function ProgressRing({ val, color, size = 64 }: { val: number; color: string; size?: number }) {
   const r = size / 2 - 4;
   const c = 2 * Math.PI * r;
   const o = c - (val / 100) * c;
@@ -124,23 +94,30 @@ function ProgressRing({ val, color, size = 56 }: { val: number; color: string; s
           style={{ filter: `drop-shadow(0 0 4px ${color}60)` }} />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="font-orbitron text-[10px] font-bold" style={{ color }}>{val}%</span>
+        <span className="font-orbitron text-[11px] font-bold" style={{ color }}>{val}%</span>
       </div>
     </div>
   );
 }
 
-/* Timeline connector dot */
-function TimelineDot({ color, active }: { color: string; active: boolean }) {
+function SignalWave({ color }: { color: string }) {
+  const pts = useMemo(() => {
+    const a: string[] = [];
+    for (let i = 0; i <= 200; i += 2) {
+      a.push(`${i},${20 + Math.sin((i / 200) * Math.PI * 4) * 12}`);
+    }
+    return a.join(' ');
+  }, []);
   return (
-    <div className="relative flex flex-col items-center">
-      <div className="w-3 h-3 rounded-full z-10"
+    <svg viewBox="0 0 200 40" className="w-full h-5" preserveAspectRatio="none">
+      <polyline fill="none" stroke={color} strokeWidth={1.5}
+        strokeOpacity={0.7} points={pts}
         style={{
-          background: active ? color : 'rgba(0,212,255,0.15)',
-          boxShadow: active ? `0 0 10px ${color}, 0 0 20px ${color}40` : 'none',
-          animation: active ? 'breathe 2s ease-in-out infinite' : 'none',
+          strokeDasharray: '4 2',
+          animation: 'waveMove 1.5s linear infinite',
+          filter: `drop-shadow(0 0 3px ${color})`,
         }} />
-    </div>
+    </svg>
   );
 }
 
@@ -149,9 +126,8 @@ function TimelineDot({ color, active }: { color: string; active: boolean }) {
    ═══════════════════════════════════════════ */
 
 export default function TrainingSection() {
-  const [selId, setSelId] = useState(missions[0].id);
   const [clock, setClock] = useState('00:00:00');
-  const sel = missions.find((m) => m.id === selId) || missions[0];
+  const [hoveredActivity, setHoveredActivity] = useState<string | null>(null);
 
   useEffect(() => {
     const t0 = Date.now();
@@ -173,7 +149,6 @@ export default function TrainingSection() {
       </div>
       <CosmicBackground variant="binary" />
 
-      {/* Subtle grid overlay */}
       <div className="absolute inset-0 z-[2] pointer-events-none" style={{
         backgroundImage: `
           linear-gradient(rgba(0,212,255,0.015) 1px, transparent 1px),
@@ -182,10 +157,10 @@ export default function TrainingSection() {
         backgroundSize: '60px 60px',
       }} />
 
-      <div className="relative z-10 max-w-[1300px] mx-auto px-4">
+      <div className="relative z-10 max-w-[1200px] mx-auto px-4">
 
-        {/* ═══ Header ═══ */}
-        <motion.div className="mb-8 text-center"
+        {/* ═══ Section Header ═══ */}
+        <motion.div className="mb-10 text-center"
           initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ duration: 0.6 }}>
           <div className="flex items-center justify-center gap-3 mb-1">
@@ -197,343 +172,440 @@ export default function TrainingSection() {
             <Rocket size={20} className="text-[#f472b6]" style={{ transform: 'scaleX(-1)' }} />
           </div>
           <p className="font-orbitron text-[8px] tracking-[0.5em] text-[#334155]">
-            TRAINING & EXPERIENCE • DEEP SPACE OPERATIONS LOG v2.1
+            TRAINING &amp; ACTIVITIES • DEEP SPACE OPERATIONS LOG v3.0
           </p>
           <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#f472b6] to-transparent opacity-25" />
         </motion.div>
 
-        {/* ═══ Main Console ═══ */}
-        <motion.div className="rounded-xl relative overflow-hidden"
+        {/* ══════════════════════════════════════════════
+           TRAINING — Featured Full-Width Card
+           ══════════════════════════════════════════════ */}
+        <motion.div className="rounded-xl relative overflow-hidden mb-10"
           style={{
-            background: 'linear-gradient(180deg, rgba(2,6,18,0.98) 0%, rgba(4,10,28,0.98) 50%, rgba(2,6,18,0.98) 100%)',
-            border: '1px solid rgba(244,114,182,0.08)',
-            boxShadow: '0 0 80px rgba(244,114,182,0.03), inset 0 1px 0 rgba(244,114,182,0.06)',
+            background: 'linear-gradient(135deg, rgba(2,6,18,0.98) 0%, rgba(4,12,32,0.98) 50%, rgba(2,6,18,0.98) 100%)',
+            border: '1px solid rgba(0,212,255,0.1)',
+            boxShadow: '0 0 60px rgba(0,212,255,0.04), inset 0 1px 0 rgba(0,212,255,0.08)',
           }}
-          initial={{ opacity: 0, scale: 0.97 }} whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }} transition={{ duration: 0.8 }}>
+          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.7 }}>
 
-          {/* ── Top Status Bar ── */}
-          <div className="flex items-center justify-between px-3 py-1.5 flex-wrap gap-x-4 gap-y-1"
-            style={{ borderBottom: '1px solid rgba(244,114,182,0.05)', background: 'rgba(244,114,182,0.015)' }}>
+          {/* Status bar */}
+          <div className="flex items-center justify-between px-4 py-2 flex-wrap gap-x-4 gap-y-1"
+            style={{ borderBottom: '1px solid rgba(0,212,255,0.06)', background: 'rgba(0,212,255,0.015)' }}>
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff9d]" style={{ boxShadow: '0 0 4px #00ff9d' }} />
-                <span className="font-orbitron text-[7px] tracking-widest text-[#00ff9d]">MISSION CTRL</span>
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00ff9d]" style={{ boxShadow: '0 0 6px #00ff9d' }} />
+                <span className="font-orbitron text-[7px] tracking-widest text-[#00ff9d]">TRAINING LOG</span>
               </span>
               <span className="font-orbitron text-[7px] text-[#1e293b]">|</span>
-              <span className="flex items-center gap-1"><Shield size={9} className="text-[#f472b6] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">SECURE</span></span>
-              <span className="flex items-center gap-1"><Cpu size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">SYS OK</span></span>
+              <span className="flex items-center gap-1"><Shield size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">VERIFIED</span></span>
+              <span className="flex items-center gap-1"><Cpu size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">MISSION ALPHA</span></span>
             </div>
             <span className="flex items-center gap-1"><Clock size={9} className="text-[#475569]" /><span className="font-orbitron text-[8px] text-[#64748b]">T+ {clock}</span></span>
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1"><Signal size={9} className="text-[#f472b6] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">COMMS 100%</span></span>
-              <span className="flex items-center gap-1"><Radio size={9} className="text-[#f472b6]" style={{ animation: 'breathe 2s ease-in-out infinite' }} /><span className="font-orbitron text-[7px] text-[#475569]">LIVE</span></span>
+              <span className="flex items-center gap-1"><Signal size={9} className="text-[#00d4ff] opacity-40" /><span className="font-orbitron text-[7px] text-[#334155]">SIGNAL 100%</span></span>
+              <span className="flex items-center gap-1"><Radio size={9} className="text-[#00ff9d]" style={{ animation: 'breathe 2s ease-in-out infinite' }} /><span className="font-orbitron text-[7px] text-[#475569]">LIVE</span></span>
             </div>
           </div>
 
-          {/* ── Content Grid ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-0">
+          {/* Main content */}
+          <div className="p-5 md:p-6">
 
-            {/* ═══════ LEFT PANEL — Mission Selector ═══════ */}
-            <div className="p-3 lg:border-r space-y-2" style={{ borderColor: 'rgba(244,114,182,0.05)' }}>
-
-              <div className="flex items-center gap-1 mb-2">
-                <Target size={9} className="text-[#475569]" />
-                <span className="font-orbitron text-[6px] tracking-[0.3em] text-[#475569]">MISSION REGISTRY</span>
+            {/* Header row */}
+            <div className="flex items-start justify-between gap-4 flex-wrap mb-5">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-orbitron text-[7px] tracking-[0.3em] px-2.5 py-1 rounded-full"
+                    style={{ color: '#0066ff', background: 'rgba(0,102,255,0.1)', border: '1px solid rgba(0,102,255,0.2)' }}>
+                    {training.status}
+                  </span>
+                </div>
+                <h3 className="font-orbitron text-xl md:text-2xl font-bold tracking-wider mb-1"
+                  style={{ color: training.color, textShadow: `0 0 15px ${training.color}30` }}>
+                  {training.title}
+                </h3>
+                <p className="font-exo text-sm md:text-base text-[#cbd5e1] mb-1">{training.subtitle}</p>
+                <div className="flex items-center gap-4 mb-2">
+                  <span className="flex items-center gap-1"><MapPin size={12} className="text-[#475569]" /><span className="font-exo text-xs text-[#94a3b8]">{training.location}</span></span>
+                  <span className="flex items-center gap-1"><Calendar size={12} className="text-[#475569]" /><span className="font-exo text-xs text-[#94a3b8]">{training.date}</span></span>
+                </div>
+                <p className="font-exo text-sm text-[#64748b] leading-relaxed max-w-2xl">{training.description}</p>
               </div>
 
-              {/* Timeline */}
-              <div className="relative">
-                {/* Vertical line */}
-                <div className="absolute left-[5px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-[rgba(244,114,182,0.15)] to-transparent" />
-
-                {missions.map((m, idx) => {
-                  const active = m.id === selId;
-                  return (
-                    <motion.button key={m.id} onClick={() => setSelId(m.id)}
-                      className="w-full text-left pl-6 py-2.5 relative cursor-pointer transition-all duration-300"
-                      whileHover={{ x: 4 }} whileTap={{ scale: 0.98 }}>
-                      {/* Timeline dot */}
-                      <div className="absolute left-0 top-1/2 -translate-y-1/2">
-                        <TimelineDot color={m.color} active={active} />
-                      </div>
-
-                      <div className="rounded-lg p-2.5 relative overflow-hidden"
-                        style={{
-                          background: active ? m.dim : 'rgba(244,114,182,0.01)',
-                          border: `1px solid ${active ? m.color + '30' : 'rgba(244,114,182,0.04)'}`,
-                        }}>
-                        {/* Status badge */}
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="font-orbitron text-[6px] tracking-[0.2em]"
-                            style={{ color: m.statusColor }}>{m.status}</span>
-                          <span className="font-orbitron text-[5px] text-[#334155]">{m.codename}</span>
-                        </div>
-                        <p className="font-orbitron text-[9px] tracking-wider mb-0.5"
-                          style={{ color: m.color, opacity: active ? 1 : 0.5 }}>{m.title}</p>
-                        <p className="font-exo text-[8px] text-[#94a3b8] truncate"
-                          style={{ opacity: active ? 0.9 : 0.4 }}>{m.organization}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="flex items-center gap-0.5"><MapPin size={7} className="text-[#475569]" /><span className="font-orbitron text-[5px] text-[#3e4c5e]">{m.location}</span></span>
-                          <span className="flex items-center gap-0.5"><Calendar size={7} className="text-[#475569]" /><span className="font-orbitron text-[5px] text-[#3e4c5e]">{m.date}</span></span>
-                        </div>
-                        {/* Progress bar */}
-                        <div className="mt-1.5 h-0.5 rounded-full bg-[rgba(0,212,255,0.04)] overflow-hidden">
-                          <motion.div className="h-full rounded-full"
-                            style={{ background: `linear-gradient(90deg, ${m.color}40, ${m.color})` }}
-                            initial={{ width: 0 }} whileInView={{ width: `${m.progress}%` }}
-                            viewport={{ once: true }} transition={{ duration: 1, delay: idx * 0.15 }} />
-                        </div>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
-
-              {/* Signal monitor */}
-              <div className="pt-2" style={{ borderTop: '1px solid rgba(244,114,182,0.03)' }}>
-                <span className="font-orbitron text-[5px] tracking-[0.3em] text-[#1e293b]">MISSION SIGNALS</span>
-                {missions.map((m) => (
-                  <div key={m.id} className="relative">
-                    <SignalWave color={m.color} active={m.id === selId} />
-                    <span className="absolute right-0 top-0 font-orbitron text-[5px]"
-                      style={{ color: m.color, opacity: m.id === selId ? 0.7 : 0.15 }}>
-                      {m.id === selId ? 'ACTIVE' : 'IDLE'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-
-              {/* Quick stats */}
-              <div className="pt-2 grid grid-cols-3 gap-1" style={{ borderTop: '1px solid rgba(244,114,182,0.03)' }}>
-                {[
-                  { label: 'MISSIONS', val: missions.length, c: '#f472b6' },
-                  { label: 'ACTIVE', val: missions.filter(m => m.status === 'ACTIVE').length, c: '#00ff9d' },
-                  { label: 'COMPLETE', val: missions.filter(m => m.status === 'COMPLETED').length, c: '#0066ff' },
-                ].map(({ label, val, c }) => (
-                  <div key={label} className="text-center p-1.5 rounded"
-                    style={{ background: 'rgba(0,212,255,0.015)', border: '1px solid rgba(0,212,255,0.04)' }}>
-                    <span className="font-orbitron text-[12px] font-bold block" style={{ color: c }}>{val}</span>
-                    <span className="font-orbitron text-[5px] tracking-wider text-[#334155]">{label}</span>
-                  </div>
-                ))}
+              {/* Progress ring */}
+              <div className="flex flex-col items-center gap-1 shrink-0">
+                <ProgressRing val={100} color={training.color} size={72} />
+                <span className="font-orbitron text-[6px] tracking-wider text-[#334155]">COMPLETION</span>
               </div>
             </div>
 
-            {/* ═══════ RIGHT PANEL — Mission Details ═══════ */}
-            <div className="p-4">
+            {/* Signal wave divider */}
+            <div className="mb-4">
+              <SignalWave color={training.color} />
+            </div>
 
-              <AnimatePresence mode="wait">
-                <motion.div key={sel.id}
-                  initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.35 }}>
+            {/* Two-column: Objectives + Tech */}
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-5">
 
-                  {/* Mission Header Card */}
-                  <div className="rounded-lg p-4 mb-3 relative overflow-hidden"
-                    style={{
-                      background: sel.dim,
-                      border: `1px solid ${sel.color}15`,
-                      boxShadow: `inset 0 0 40px ${sel.color}05`,
-                    }}>
-                    {/* Corner brackets */}
-                    {['top-0 left-0', 'top-0 right-0 rotate-90', 'bottom-0 right-0 rotate-180', 'bottom-0 left-0 -rotate-90'].map((pos, i) => (
-                      <div key={i} className={`absolute ${pos} w-4 h-4 pointer-events-none`}>
-                        <div className="absolute top-0 left-0 w-full h-px" style={{ background: sel.color, opacity: 0.4 }} />
-                        <div className="absolute top-0 left-0 h-full w-px" style={{ background: sel.color, opacity: 0.4 }} />
-                      </div>
-                    ))}
+              {/* Objectives */}
+              <div className="rounded-lg p-4"
+                style={{ background: 'rgba(0,212,255,0.02)', border: '1px solid rgba(0,212,255,0.05)' }}>
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Crosshair size={12} style={{ color: training.color }} />
+                  <span className="font-orbitron text-[8px] tracking-[0.2em] text-[#475569]">MISSION OBJECTIVES</span>
+                </div>
 
-                    {/* Scan line */}
-                    <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                      <div className="w-full h-px absolute"
-                        style={{ background: `linear-gradient(90deg, transparent, ${sel.color}20, transparent)`, animation: 'scanLine 4s ease-in-out infinite' }} />
+                <div className="space-y-3">
+                  {training.highlights.map((h, i) => (
+                    <motion.div key={i} className="flex gap-2.5 items-start"
+                      initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }} transition={{ delay: i * 0.12, duration: 0.4 }}>
+                      <ChevronRight size={14} style={{ color: training.color, marginTop: 2 }}
+                        className="shrink-0" />
+                      <p className="font-exo text-xs text-[#94a3b8] leading-relaxed">{h}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tech Stack */}
+              <div className="rounded-lg p-4 md:min-w-[200px]"
+                style={{ background: 'rgba(0,212,255,0.02)', border: '1px solid rgba(0,212,255,0.05)' }}>
+                <span className="font-orbitron text-[8px] tracking-[0.2em] text-[#334155] block mb-3">TECH ARSENAL</span>
+                <div className="flex flex-col gap-2">
+                  {training.tech.map((t) => (
+                    <div key={t} className="flex items-center gap-2 font-exo text-xs px-3 py-1.5 rounded-md"
+                      style={{
+                        color: training.color,
+                        background: `${training.color}08`,
+                        border: `1px solid ${training.color}15`,
+                      }}>
+                      <div className="w-1.5 h-1.5 rounded-full" style={{ background: training.color, boxShadow: `0 0 4px ${training.color}` }} />
+                      {t}
                     </div>
+                  ))}
+                </div>
 
-                    <div className="flex items-start justify-between gap-4 flex-wrap">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-orbitron text-[6px] tracking-[0.3em] px-2 py-0.5 rounded-full"
-                            style={{ color: sel.statusColor, background: `${sel.statusColor}10`, border: `1px solid ${sel.statusColor}20` }}>
-                            {sel.status}
-                          </span>
-                          <span className="font-orbitron text-[6px] tracking-[0.2em] text-[#334155]">{sel.codename}</span>
-                        </div>
-                        <h3 className="font-orbitron text-base md:text-lg font-semibold tracking-wider mb-0.5"
-                          style={{ color: sel.color, textShadow: `0 0 10px ${sel.color}30` }}>
-                          {sel.title}
-                        </h3>
-                        <p className="font-exo text-sm text-[#e2e8f0] mb-0.5">{sel.organization}</p>
-                        <div className="flex items-center gap-3">
-                          <span className="flex items-center gap-1"><MapPin size={10} className="text-[#475569]" /><span className="font-exo text-[10px] text-[#94a3b8]">{sel.location}</span></span>
-                          <span className="flex items-center gap-1"><Calendar size={10} className="text-[#475569]" /><span className="font-exo text-[10px] text-[#94a3b8]">{sel.date}</span></span>
-                        </div>
-                        <p className="font-exo text-xs text-[#64748b] mt-2 leading-relaxed">{sel.description}</p>
-                      </div>
-
-                      {/* Progress ring */}
-                      <div className="flex flex-col items-center gap-1 shrink-0">
-                        <ProgressRing val={sel.progress} color={sel.color} size={64} />
-                        <span className="font-orbitron text-[5px] tracking-wider text-[#334155]">COMPLETION</span>
-                      </div>
+                {/* Mini stats */}
+                <div className="mt-4 pt-3" style={{ borderTop: `1px solid ${training.color}10` }}>
+                  <span className="font-orbitron text-[6px] tracking-[0.2em] text-[#334155] block mb-2">STATUS BOARD</span>
+                  {[
+                    { l: 'SIGNAL', v: 'STRONG', c: '#00ff9d' },
+                    { l: 'DATA', v: 'SYNCED', c: '#00d4ff' },
+                    { l: 'REPORT', v: 'ARCHIVED', c: '#0066ff' },
+                  ].map(({ l, v, c }) => (
+                    <div key={l} className="flex items-center justify-between py-1"
+                      style={{ borderBottom: '1px solid rgba(0,212,255,0.03)' }}>
+                      <span className="font-orbitron text-[6px] tracking-wider text-[#3e4c5e]">{l}</span>
+                      <span className="flex items-center gap-1">
+                        <div className="w-1 h-1 rounded-full" style={{ background: c, boxShadow: `0 0 3px ${c}` }} />
+                        <span className="font-orbitron text-[6px]" style={{ color: c }}>{v}</span>
+                      </span>
                     </div>
-                  </div>
-
-                  {/* Two-column layout for details */}
-                  <div className="grid grid-cols-1 md:grid-cols-[1fr_220px] gap-3">
-
-                    {/* Mission Highlights */}
-                    <div className="rounded-lg p-3"
-                      style={{ background: 'rgba(0,212,255,0.015)', border: '1px solid rgba(0,212,255,0.04)' }}>
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <Crosshair size={10} style={{ color: sel.color }} />
-                        <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#475569]">MISSION OBJECTIVES</span>
-                      </div>
-
-                      <div className="space-y-2">
-                        {sel.highlights.map((h, i) => (
-                          <motion.div key={i} className="flex gap-2 items-start"
-                            initial={{ opacity: 0, x: -10 }} whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.4 }}>
-                            <ChevronRight size={12} style={{ color: sel.color, marginTop: 2 }}
-                              className="shrink-0" />
-                            <p className="font-exo text-[11px] text-[#94a3b8] leading-relaxed">{h}</p>
-                          </motion.div>
-                        ))}
-                      </div>
-
-                      {/* Tech stack */}
-                      <div className="mt-3 pt-2" style={{ borderTop: `1px solid ${sel.color}08` }}>
-                        <span className="font-orbitron text-[6px] tracking-[0.2em] text-[#334155] block mb-1.5">TECH ARSENAL</span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {sel.tech.map((t) => (
-                            <span key={t} className="font-exo text-[9px] px-2 py-0.5 rounded"
-                              style={{
-                                color: sel.color,
-                                background: `${sel.color}08`,
-                                border: `1px solid ${sel.color}15`,
-                              }}>{t}</span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Right side — Stats and monitoring */}
-                    <div className="space-y-2">
-
-                      {/* Systems overview */}
-                      <div className="rounded-lg p-2.5"
-                        style={{ background: 'rgba(0,212,255,0.015)', border: '1px solid rgba(0,212,255,0.04)' }}>
-                        <div className="flex items-center gap-1 mb-2">
-                          <Activity size={8} style={{ color: sel.color }} />
-                          <span className="font-orbitron text-[6px] tracking-[0.2em] text-[#334155]">SYSTEMS TELEMETRY</span>
-                        </div>
-
-                        {[
-                          { label: 'SUBSYSTEMS', val: sel.metrics.systems, max: 15, icon: Cpu },
-                          { label: 'UPTIME', val: parseFloat(sel.metrics.uptime), max: 100, icon: Wifi },
-                          { label: 'OPS COUNT', val: sel.metrics.missions, max: 8, icon: Orbit },
-                        ].map(({ label, val, max, icon: Icon }) => (
-                          <div key={label} className="mb-2">
-                            <div className="flex items-center justify-between mb-0.5">
-                              <span className="flex items-center gap-1">
-                                <Icon size={7} className="text-[#334155]" />
-                                <span className="font-orbitron text-[5px] tracking-wider text-[#3e4c5e]">{label}</span>
-                              </span>
-                              <span className="font-orbitron text-[8px]" style={{ color: sel.color }}>{val}</span>
-                            </div>
-                            <div className="h-1 rounded-full bg-[rgba(0,212,255,0.04)] overflow-hidden">
-                              <motion.div className="h-full rounded-full"
-                                style={{ background: `linear-gradient(90deg, ${sel.color}40, ${sel.color})`, boxShadow: `0 0 4px ${sel.color}30` }}
-                                initial={{ width: 0 }} whileInView={{ width: `${(Number(val) / max) * 100}%` }}
-                                viewport={{ once: true }} transition={{ duration: 1, ease: 'easeOut' }} />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Mission status indicators */}
-                      <div className="rounded-lg p-2.5"
-                        style={{ background: 'rgba(0,212,255,0.015)', border: '1px solid rgba(0,212,255,0.04)' }}>
-                        <div className="flex items-center gap-1 mb-2">
-                          <Radar size={8} className="text-[#334155]" />
-                          <span className="font-orbitron text-[6px] tracking-[0.2em] text-[#334155]">STATUS BOARD</span>
-                        </div>
-
-                        {[
-                          { l: 'COMM LINK', v: 'ESTABLISHED', c: '#00ff9d' },
-                          { l: 'DATA SYNC', v: 'ACTIVE', c: '#00d4ff' },
-                          { l: 'REPORTING', v: sel.status === 'ACTIVE' ? 'LIVE' : 'ARCHIVED', c: sel.status === 'ACTIVE' ? '#00ff9d' : '#0066ff' },
-                          { l: 'CLEARANCE', v: 'LEVEL 3', c: '#f472b6' },
-                        ].map(({ l, v, c }) => (
-                          <div key={l} className="flex items-center justify-between py-1"
-                            style={{ borderBottom: '1px solid rgba(0,212,255,0.03)' }}>
-                            <span className="font-orbitron text-[6px] tracking-wider text-[#3e4c5e]">{l}</span>
-                            <span className="flex items-center gap-1">
-                              <div className="w-1 h-1 rounded-full" style={{ background: c, boxShadow: `0 0 3px ${c}` }} />
-                              <span className="font-orbitron text-[6px]" style={{ color: c }}>{v}</span>
-                            </span>
-                          </div>
-                        ))}
-                      </div>
-
-                      {/* Circular gauges */}
-                      <div className="flex justify-around">
-                        {[
-                          { v: 98, l: 'PERF', c: '#00ff9d' },
-                          { v: sel.progress, l: 'PROG', c: sel.color },
-                          { v: 87, l: 'SYNC', c: '#f472b6' },
-                        ].map(({ v, l, c }) => {
-                          const r2 = 14;
-                          const circ = 2 * Math.PI * r2;
-                          return (
-                            <div key={l} className="text-center">
-                              <svg width="36" height="36" className="-rotate-90">
-                                <circle cx="18" cy="18" r={r2} fill="none" stroke="rgba(0,212,255,0.04)" strokeWidth="2.5" />
-                                <motion.circle cx="18" cy="18" r={r2} fill="none" stroke={c} strokeWidth="2.5"
-                                  strokeDasharray={circ} strokeLinecap="round"
-                                  initial={{ strokeDashoffset: circ }}
-                                  whileInView={{ strokeDashoffset: circ - (v / 100) * circ }}
-                                  viewport={{ once: true }} transition={{ duration: 1 }}
-                                  style={{ filter: `drop-shadow(0 0 2px ${c}40)` }} />
-                              </svg>
-                              <span className="font-orbitron text-[5px] text-[#334155] block mt-0.5">{l}</span>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-
-                </motion.div>
-              </AnimatePresence>
-
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* ── Bottom Bar ── */}
-          <div className="flex items-center justify-between px-3 py-1.5 flex-wrap gap-2"
-            style={{ borderTop: '1px solid rgba(244,114,182,0.05)', background: 'rgba(244,114,182,0.01)' }}>
-            <div className="flex items-center gap-3">
-              {missions.map((m) => (
-                <button key={m.id} onClick={() => setSelId(m.id)}
-                  className="flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-all duration-200 cursor-pointer"
-                  style={{
-                    background: m.id === selId ? `${m.color}10` : 'transparent',
-                    border: `1px solid ${m.id === selId ? m.color + '25' : 'rgba(0,212,255,0.04)'}`,
-                  }}>
-                  <Navigation size={8} style={{ color: m.color, opacity: m.id === selId ? 1 : 0.3 }} />
-                  <span className="font-orbitron text-[6px] tracking-wider"
-                    style={{ color: m.color, opacity: m.id === selId ? 1 : 0.3 }}>{m.codename}</span>
-                </button>
-              ))}
-            </div>
+          {/* Bottom bar */}
+          <div className="flex items-center justify-between px-4 py-1.5"
+            style={{ borderTop: '1px solid rgba(0,212,255,0.05)', background: 'rgba(0,212,255,0.01)' }}>
             <div className="flex items-center gap-2">
-              <Zap size={9} className="text-[#f472b6] opacity-40" />
+              <Zap size={9} className="text-[#00d4ff] opacity-40" />
               <span className="font-orbitron text-[6px] text-[#334155]">ALL SYSTEMS NOMINAL</span>
             </div>
+            <span className="font-orbitron text-[6px] text-[#1e293b]">MISSION CTRL • v3.0</span>
           </div>
-
         </motion.div>
+
+        {/* ══════════════════════════════════════════════
+           EXTRA-CURRICULAR — Field Operations
+           ══════════════════════════════════════════════ */}
+
+        <motion.div className="mb-6 text-center"
+          initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <div className="flex items-center justify-center gap-3 mb-1">
+            <Sparkles size={16} className="text-[#a78bfa]" />
+            <h3 className="font-orbitron text-sm md:text-base font-bold text-[#a78bfa] uppercase tracking-[0.35em]"
+              style={{ textShadow: '0 0 15px rgba(167,139,250,0.3)' }}>
+              Field Operations
+            </h3>
+            <Sparkles size={16} className="text-[#a78bfa]" />
+          </div>
+          <p className="font-orbitron text-[7px] tracking-[0.5em] text-[#334155]">
+            EXTRA-CURRICULAR ACTIVITIES • FIELD DEPLOYMENT LOG
+          </p>
+          <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#a78bfa] to-transparent opacity-20" />
+        </motion.div>
+
+        {/* 2×2 Activity Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {activities.map((act, idx) => {
+            const Icon = act.icon;
+            const isHovered = hoveredActivity === act.id;
+            return (
+              <motion.div
+                key={act.id}
+                className="relative rounded-xl overflow-hidden cursor-default"
+                style={{
+                  background: 'linear-gradient(160deg, rgba(4,10,28,0.95) 0%, rgba(2,6,18,0.98) 100%)',
+                  border: `1px solid ${isHovered ? act.color + '35' : 'rgba(167,139,250,0.06)'}`,
+                  boxShadow: isHovered
+                    ? `0 0 35px ${act.color}12, inset 0 1px 0 ${act.color}10`
+                    : 'inset 0 1px 0 rgba(167,139,250,0.03)',
+                  transition: 'border-color 0.3s, box-shadow 0.3s',
+                }}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                onMouseEnter={() => setHoveredActivity(act.id)}
+                onMouseLeave={() => setHoveredActivity(null)}
+              >
+                {/* Top glow */}
+                <div className="absolute top-0 left-0 right-0 h-px"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${act.color}${isHovered ? '50' : '15'}, transparent)`,
+                    transition: 'background 0.3s',
+                  }} />
+
+                {/* Scan line */}
+                {isHovered && (
+                  <motion.div className="absolute inset-0 pointer-events-none overflow-hidden"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <div className="w-full h-px absolute"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${act.color}30, transparent)`,
+                        animation: 'scanLine 3s ease-in-out infinite',
+                      }} />
+                  </motion.div>
+                )}
+
+                <div className="relative p-5">
+                  {/* Top row: Tag + Stat */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="font-orbitron text-[7px] tracking-[0.3em] px-2.5 py-1 rounded-full"
+                      style={{
+                        color: act.color,
+                        background: `${act.color}10`,
+                        border: `1px solid ${act.color}20`,
+                      }}>
+                      {act.tag}
+                    </span>
+
+                    {/* Stat badge */}
+                    <div className="flex items-center gap-2">
+                      <span className="font-orbitron text-xl font-bold" style={{ color: act.color, textShadow: isHovered ? `0 0 10px ${act.color}40` : 'none' }}>
+                        {act.stat}
+                      </span>
+                      <span className="font-orbitron text-[6px] tracking-[0.15em] text-[#475569]">
+                        {act.statLabel}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Icon + Title + Description */}
+                  <div className="flex gap-4 items-start">
+                    <div className="w-11 h-11 rounded-lg flex items-center justify-center shrink-0"
+                      style={{
+                        background: `${act.color}08`,
+                        border: `1px solid ${act.color}20`,
+                        boxShadow: isHovered ? `0 0 15px ${act.color}20` : 'none',
+                        transition: 'box-shadow 0.3s',
+                      }}>
+                      <Icon size={20} style={{ color: act.color }} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-orbitron text-xs tracking-wider mb-1.5"
+                        style={{ color: act.color, textShadow: isHovered ? `0 0 8px ${act.color}30` : 'none' }}>
+                        {act.title}
+                      </h4>
+                      <p className="font-exo text-xs text-[#7c8ca3] leading-relaxed">
+                        {act.description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Bottom signal bar */}
+                  <div className="flex items-center justify-between mt-4 pt-3"
+                    style={{ borderTop: `1px solid ${act.color}08` }}>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1 h-1 rounded-full" style={{
+                        background: act.color,
+                        boxShadow: `0 0 4px ${act.color}`,
+                        animation: 'breathe 2s ease-in-out infinite',
+                      }} />
+                      <span className="font-orbitron text-[6px] tracking-wider" style={{ color: act.color, opacity: 0.5 }}>
+                        LOGGED
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-0.5">
+                      {[0.3, 0.5, 0.7, 0.9, 1].map((h, i) => (
+                        <motion.div key={i} className="w-[3px] rounded-full"
+                          style={{
+                            background: act.color,
+                            opacity: isHovered ? 0.8 : 0.2,
+                            transition: 'opacity 0.3s',
+                          }}
+                          animate={{ height: isHovered ? `${h * 16}px` : '4px' }}
+                          transition={{ duration: 0.3, delay: i * 0.05 }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* ══════════════════════════════════════════════
+           ACHIEVEMENTS
+           ══════════════════════════════════════════════ */}
+
+        <motion.div className="mt-10 mb-6 text-center"
+          initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }} transition={{ duration: 0.5 }}>
+          <div className="flex items-center justify-center gap-3 mb-1">
+            <Award size={16} className="text-[#f59e0b]" />
+            <h3 className="font-orbitron text-sm md:text-base font-bold text-[#f59e0b] uppercase tracking-[0.35em]"
+              style={{ textShadow: '0 0 15px rgba(245,158,11,0.3)' }}>
+              Achievements
+            </h3>
+            <Award size={16} className="text-[#f59e0b]" />
+          </div>
+          <p className="font-orbitron text-[7px] tracking-[0.5em] text-[#334155]">
+            RECOGNITION &amp; MILESTONES • COMMENDATION LOG
+          </p>
+          <div className="h-px mt-2 bg-gradient-to-r from-transparent via-[#f59e0b] to-transparent opacity-20" />
+        </motion.div>
+
+        {/* Achievement Cards */}
+        <div className="grid grid-cols-1 gap-4">
+          {achievements.map((ach, idx) => {
+            const Icon = ach.icon;
+            const isHovered = hoveredActivity === ach.id;
+            return (
+              <motion.div
+                key={ach.id}
+                className="relative rounded-xl overflow-hidden cursor-default"
+                style={{
+                  background: 'linear-gradient(160deg, rgba(4,10,28,0.95) 0%, rgba(2,6,18,0.98) 100%)',
+                  border: `1px solid ${isHovered ? ach.color + '35' : 'rgba(245,158,11,0.08)'}`,
+                  boxShadow: isHovered
+                    ? `0 0 40px ${ach.color}15, inset 0 1px 0 ${ach.color}10`
+                    : 'inset 0 1px 0 rgba(245,158,11,0.04)',
+                  transition: 'border-color 0.3s, box-shadow 0.3s',
+                }}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                onMouseEnter={() => setHoveredActivity(ach.id)}
+                onMouseLeave={() => setHoveredActivity(null)}
+              >
+                {/* Top glow */}
+                <div className="absolute top-0 left-0 right-0 h-px"
+                  style={{
+                    background: `linear-gradient(90deg, transparent, ${ach.color}${isHovered ? '50' : '20'}, transparent)`,
+                    transition: 'background 0.3s',
+                  }} />
+
+                {/* Scan line */}
+                {isHovered && (
+                  <motion.div className="absolute inset-0 pointer-events-none overflow-hidden"
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <div className="w-full h-px absolute"
+                      style={{
+                        background: `linear-gradient(90deg, transparent, ${ach.color}30, transparent)`,
+                        animation: 'scanLine 3s ease-in-out infinite',
+                      }} />
+                  </motion.div>
+                )}
+
+                <div className="relative p-5 md:p-6">
+                  <div className="flex items-center gap-5 flex-wrap">
+                    {/* Icon */}
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center shrink-0"
+                      style={{
+                        background: `${ach.color}08`,
+                        border: `1px solid ${ach.color}20`,
+                        boxShadow: isHovered ? `0 0 20px ${ach.color}20` : 'none',
+                        transition: 'box-shadow 0.3s',
+                      }}>
+                      <Icon size={26} style={{ color: ach.color }} />
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-orbitron text-[7px] tracking-[0.3em] px-2.5 py-1 rounded-full"
+                          style={{
+                            color: ach.color,
+                            background: `${ach.color}10`,
+                            border: `1px solid ${ach.color}20`,
+                          }}>
+                          {ach.tag}
+                        </span>
+                      </div>
+                      <h4 className="font-orbitron text-sm md:text-base tracking-wider mb-1"
+                        style={{ color: ach.color, textShadow: isHovered ? `0 0 10px ${ach.color}30` : 'none' }}>
+                        {ach.title}
+                      </h4>
+                      <p className="font-exo text-xs text-[#7c8ca3] leading-relaxed max-w-2xl">
+                        {ach.description}
+                      </p>
+                    </div>
+
+                    {/* Stat */}
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="text-right">
+                        <span className="font-orbitron text-3xl md:text-4xl font-bold block" style={{ color: ach.color, textShadow: isHovered ? `0 0 15px ${ach.color}40` : 'none' }}>
+                          {ach.stat}
+                        </span>
+                        <span className="font-orbitron text-[7px] tracking-[0.2em] text-[#475569]">
+                          {ach.statLabel}
+                        </span>
+                      </div>
+                      <div className="flex flex-col items-center gap-0.5">
+                        {[0.3, 0.5, 0.7, 0.9, 1].map((h, i) => (
+                          <motion.div key={i} className="h-[3px] rounded-full"
+                            style={{
+                              background: ach.color,
+                              opacity: isHovered ? 0.8 : 0.2,
+                              transition: 'opacity 0.3s',
+                            }}
+                            animate={{ width: isHovered ? `${h * 20}px` : '4px' }}
+                            transition={{ duration: 0.3, delay: i * 0.05 }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Bottom summary */}
+        <motion.div className="mt-8 flex items-center justify-center gap-2"
+          initial={{ opacity: 0 }} whileInView={{ opacity: 1 }}
+          viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.3 }}>
+          <div className="h-px flex-1 max-w-[80px] bg-gradient-to-r from-transparent to-[rgba(167,139,250,0.15)]" />
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full"
+            style={{ background: 'rgba(167,139,250,0.04)', border: '1px solid rgba(167,139,250,0.08)' }}>
+            <Sparkles size={8} className="text-[#a78bfa] opacity-50" />
+            <span className="font-orbitron text-[6px] tracking-[0.3em] text-[#475569]">
+              1 TRAINING • {activities.length} ACTIVITIES • {achievements.length} ACHIEVEMENT
+            </span>
+            <Sparkles size={8} className="text-[#a78bfa] opacity-50" />
+          </div>
+          <div className="h-px flex-1 max-w-[80px] bg-gradient-to-l from-transparent to-[rgba(167,139,250,0.15)]" />
+        </motion.div>
+
       </div>
 
       <style jsx>{`
