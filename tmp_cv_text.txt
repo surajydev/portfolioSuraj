@@ -1,0 +1,69 @@
+Suraj Yadav 
+ 
++91-7071076349  
+ surajyadav052005@gmail.com  
+ linkedin.com/in/surajyadav/  
+ github.com/surajydev 
+ 
+PROJECTS 
+PayPal Clone | Spring Boot, Microservices, Kafka, JWT, Docker, API Gateway, Eureka 
+Oct 2025 – Nov 2025 
+• Built a modular PayPal-style system with microservices for users, wallets, transactions and notifications, improving overall 
+application structure by around 25% 
+• Configured Kafka and Redis for event streaming and caching, reducing transaction delays by 15–20% in test runs 
+• Deployed all services using Docker and API Gateway with Eureka, enabling smoother routing and service discovery across the 
+application 
+UniUnite | HTML, CSS, JavaScript, UI/UX, Figma, Font Awesome 
+Feb 2025 – Apr 2025 
+• Designed the Profile Module UI using HTML, CSS, and JavaScript, organizing bio, education, and skills sections for better clarity 
+and responsiveness 
+• Analyzed student needs and converted findings into UI/UX designs in Figma, improving feature flow for communities, events, and 
+notes 
+• Assisted in campus promotions and navigation testing during beta launch, supporting early user engagement and usability feedback 
+Healthcare App | Figma, UI/UX Design, Wireframing, Prototyping 
+Oct 2024 
+• Developed a hospital-service prototype with cleaner appointments, insurance and resource navigation, reducing user confusion by 
+25% 
+• Analyzed user flows and optimized booking steps, lowering the interaction sequence by 30% through clearer transitions 
+• Crafted responsive screens for appointments, insurance and resources, improving readability and visual balance by about 20% across 
+devices 
+ 
+TRAINING 
+Think Design Prototype | Figma, Design Thinking Frameworks, UX Research Tools 
+Jun 2025 – Jul 2025 
+• Explored core Design Thinking concepts, improving ability to frame problems and identify user pain points by around 30% through 
+structured exercises 
+• Practiced Figma for wireframing and prototyping, strengthening layout and interaction design skills by nearly 40% across weekly 
+tasks 
+• Learned to apply user feedback and design principles to refine interfaces, enhancing usability evaluation skills by about 25% during 
+guided reviews 
+ 
+SKILLS 
+Languages :            C++, JavaScript, C, Java, Python 
+Frameworks :       HTML and CSS, Bootstrap, Node.js, React, Spring 
+Tools/Platforms :   MySQL, AWS, MongoDB 
+Soft Skills :            Innovative, Research-Oriented, Interactive, Adaptive, Strategic Problem-Solving 
+CERTIFICATES 
+• ChatGPT-4 Prompt Engineering: ChatGPT, Generative AI & LLM | Infosys 
+Aug 2025 
+• Software Engineering: Implementation Testing | Coursera 
+Apr 2024 
+• Responsive Web Design | freeCodeCamp 
+Nov 2023 
+EXTRA-CURRICULAR ACTIVITIES 
+• Led NGO-based community drives, coordinating awareness and plantation activities with 50+ participants 
+• Participated in the Binary Blitz hackathon and qualified for the second round among 20+ competing teams 
+• Organized event operations as a Student Coordinator during the Inter Hostel Competition for 100+ students 
+EDUCATION 
+Lovely Professional University 
+August 2023 – Present 
+Bachelor of Technology – Computer Science and Engineering; CGPA: 8.60 
+Phagwara, Punjab 
+Reliance Academy 
+June 2021 – June 2022 
+Intermediate; Percentage: 85.8% 
+Gorakhpur, Uttar Pradesh 
+Academic Heights Public School 
+April 2019 – March 2020 
+Matriculation; Percentage: 85% 
+Gorakhpur, Uttar Pradesh 

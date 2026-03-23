@@ -228,7 +228,7 @@ export default function HeroSection() {
             className="font-orbitron text-xs uppercase tracking-wider px-6 py-3 rounded-lg bg-[#00b4d8]/10 border border-[#00b4d8]/40 text-[#00b4d8] hover:bg-[#00b4d8]/20 hover:border-[#00b4d8]/80 hover:scale-[1.04] hover:shadow-[0_0_25px_rgba(0,180,216,0.3)] transition-all duration-300"
             style={{ boxShadow: '0 0 20px rgba(0, 180, 216, 0.15)' }}
           >
-            Download CV
+            View CV
           </a>
         </motion.div>
 
